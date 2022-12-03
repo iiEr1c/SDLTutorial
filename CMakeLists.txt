@@ -4,6 +4,8 @@ project(SDLTutorial VERSION 0.1
                  DESCRIPTION "SDLTutorial"
                  LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 20)
+
 include(FetchContent)
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -49,6 +51,13 @@ list(APPEND CXX_FLAGS_RELEASE
             "-Wshadow"
             "-Wno-unused-parameter"
             "-Wno-unused")
+
+set(CMAKE_VERBOSE_MAKEFILE ON)
+#set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
+set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
+
+
+find_package(SDL2 REQUIRED)
 
 # The compiled library code is here
 add_subdirectory(src)

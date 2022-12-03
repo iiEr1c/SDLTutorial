@@ -2,7 +2,6 @@ add_executable(app app.cpp)
 
 target_compile_features(app PRIVATE cxx_std_20)
 
-
 target_compile_options(app PRIVATE
             ${CXX_FLAGS}
             "$<$<CONFIG:Debug>:${CXX_FLAGS_DEBUG}>"
@@ -14,4 +13,4 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 # target_link_libraries(app PRIVATE TinyJson)
-target_link_libraries(app PRIVATE fmt::fmt)
+target_link_libraries(app PRIVATE fmt::fmt MySDL)
