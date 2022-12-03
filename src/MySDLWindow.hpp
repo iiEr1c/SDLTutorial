@@ -19,5 +19,9 @@ public:
   MySDLWindow(MySDLWindow &&);
 
   MySDLWindow &operator=(MySDLWindow &&);
+
+  SDL_Window *getWindowPtr() const;
+
+  bool available() const;
 };
 } // namespace HF

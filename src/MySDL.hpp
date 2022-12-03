@@ -2,13 +2,16 @@
 
 #include "SDL.h"
 
+#include "MySDLSurface.hpp"
 #include "MySDLWindow.hpp"
 
 #include <memory>
+#include <string>
 
 namespace HF {
 class MySDL {
-  std::unique_ptr<MySDLWindow> m_window;
+  MySDLWindow m_window;
+  MySDLSurface m_surface;
 
 public:
   MySDL(uint32_t initType = SDL_INIT_VIDEO);
@@ -19,6 +22,9 @@ public:
 
   void CreateWindow(const char *title, int x, int y, int w, int h,
                     uint32_t flags);
+
+  /* 依赖于内部的m_window != nullptr */
+  void LoadMediaToWindowSurface(const std::string &);
 
   static void Delay(int timeMS);
 };

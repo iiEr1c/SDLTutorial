@@ -1,11 +1,13 @@
 SET(MYSDL_HEAD
     "MySDL.hpp"
     "MySDLWindow.hpp"
+    "MySDLSurface.hpp"
     )
 
 SET(MYSDL_SRC
     "MySDL.cpp"
     "MySDLWindow.cpp"
+    "MySDLSurface.cpp"
     )
 
 add_library(MySDL ${MYSDL_HEAD} ${MYSDL_SRC})

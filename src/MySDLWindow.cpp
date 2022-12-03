@@ -28,7 +28,14 @@ MySDLWindow::MySDLWindow(MySDLWindow &&rhs)
     : m_window(std::exchange(rhs.m_window, nullptr)) {}
 
 MySDLWindow &MySDLWindow::operator=(MySDLWindow &&rhs) {
+  if (m_window != nullptr) {
+    SDL_DestroyWindow(m_window);
+  }
   m_window = std::exchange(rhs.m_window, nullptr);
   return *this;
 }
+
+SDL_Window *MySDLWindow::getWindowPtr() const { return m_window; }
+
+bool MySDLWindow::available() const { return m_window != nullptr; }
 } // namespace HF

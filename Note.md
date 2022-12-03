@@ -14,3 +14,13 @@ sudo apt install libsdl2-dev
 
 ## 1.2 内存泄漏
 直接调用```SDL_Init()```然后调用```SDL_Quit()```是存在内存泄露的, 暂时先不处理.
+
+
+# LESSON 2 [USE SDL SURFACE]
+SDL SURFACE是一个图像数据类型, 它包含了所有图像的所有需要渲染的pixel. 这个渲染是通过CPU来做的, 而非GPU. SURFACE依赖于WindowSurface.
+
+```shell
+window -> SDL_GetWindowSurface -> (渲染) -> SDL_BlitSurface & SDL_UpdateWindowSurface(刷新屏幕)
+
+图片 -> surface
+```
