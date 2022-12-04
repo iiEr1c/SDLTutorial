@@ -8,9 +8,9 @@ MySDL::MySDL(uint32_t initType) { SDL_Init(initType); }
 
 MySDL::~MySDL() { SDL_Quit(); }
 
-void MySDL::CreateWindow(const char *title, int x, int y, int w, int h,
-                         uint32_t flags) {
-  m_window = MySDLWindow(title, x, y, w, h, flags);
+void MySDL::CreateWindow(const char *title, int xPos, int yPos, int weight,
+                         int height, uint32_t flags) {
+  m_window = MySDLWindow(title, xPos, yPos, weight, height, flags);
 }
 
 void MySDL::Delay(int timeMS) { SDL_Delay(timeMS); }
@@ -27,6 +27,12 @@ void MySDL::LoadMediaToWindowSurface(const std::string &path) {
     SDL_UpdateWindowSurface(m_window.getWindowPtr());
   } else {
     fmt::print("SDL window isn't initial\n");
+  }
+}
+
+void MySDL::loopAndWaitEvent() {
+  while (!quit.test()) {
+    
   }
 }
 

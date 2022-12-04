@@ -8,7 +8,8 @@ class MySDLWindow {
 
 public:
   MySDLWindow();
-  MySDLWindow(const char *title, int x, int y, int w, int h, uint32_t flags);
+  MySDLWindow(const char *title, int xPos, int yPos, int weight, int height,
+              uint32_t flags);
 
   ~MySDLWindow();
 

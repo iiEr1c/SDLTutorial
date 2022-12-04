@@ -8,9 +8,9 @@
 namespace HF {
 MySDLWindow::MySDLWindow() : m_window{nullptr} {}
 
-MySDLWindow::MySDLWindow(const char *title, int x, int y, int w, int h,
-                         uint32_t flags)
-    : m_window(SDL_CreateWindow(title, x, y, w, h, flags)) {
+MySDLWindow::MySDLWindow(const char *title, int xPos, int yPos, int weight,
+                         int height, uint32_t flags)
+    : m_window(SDL_CreateWindow(title, xPos, yPos, weight, height, flags)) {
   if (m_window == nullptr) [[unlikely]] {
     fmt::print("create window error. reason: {}\n", SDL_GetError());
     std::abort();
