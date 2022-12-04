@@ -54,7 +54,7 @@ void MySDL::LoadOrChangeMediaToTexture(const std::string &path) {
     return;
   }
 
-  if (m_render->available()) {
+  if (m_render != nullptr && m_render->available()) {
     m_texture = MySDLTexture(m_render, std::move(tmpSurface));
   } else {
     fmt::print("Load {} to Texture failed.\n", path);
@@ -69,7 +69,7 @@ void MySDL::UpdateSurface() const {
 }
 
 void MySDL::UpdateTexture() const {
-  if (m_render->available() && m_texture.available()) {
+  if (m_render != nullptr && m_render->available() && m_texture.available()) {
     SDL_RenderClear(m_render->getRendererPtr());
     SDL_RenderCopy(m_render->getRendererPtr(), m_texture.getTexturePtr(),
                    nullptr, nullptr);
