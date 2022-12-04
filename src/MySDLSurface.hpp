@@ -15,6 +15,8 @@ public:
 
   MySDLSurface(const std::string &);
 
+  MySDLSurface(SDL_Surface *);
+
   ~MySDLSurface();
 
   MySDLSurface(const MySDLSurface &) = delete;

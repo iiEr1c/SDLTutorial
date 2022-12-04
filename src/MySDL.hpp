@@ -32,14 +32,22 @@ public:
   /* 依赖于内部的m_window != nullptr */
   void LoadOrChangeMediaSurface(const std::string &);
 
-  /* display surface */
-  void DisplaySurface() const;
+  void LoadOrChangeMediaSurfaceWithConvert(const std::string &);
+
+  /* display surface, src = m_surface, 即上下文在MySDL这个类中定义了,
+   * 是否有更好的方案 */
+  void UpdateSurface() const;
+
+  /* 目前提供修改dst surface的stretch rect接口 */
+  void ScaledSurface(int xPos, int yPos, int weight, int height) const;
 
   static void Delay(int timeMS);
 
   void LoopAndWaitEvent();
 
   void StopLoop();
+
+  void Display() const;
 
   void RegisterEvent(uint32_t, MySDLEvent::MySDLEventCallbackType);
 

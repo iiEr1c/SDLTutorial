@@ -23,6 +23,8 @@ public:
 
   SDL_Window *getWindowPtr() const;
 
+  SDL_Surface *getWindowSurfacePtr() const;
+
   bool available() const;
 };
 } // namespace HF

@@ -5,6 +5,8 @@
 namespace HF {
 MySDLSurface::MySDLSurface() {}
 
+MySDLSurface::MySDLSurface(SDL_Surface *surface) : m_surface{surface} {}
+
 MySDLSurface::MySDLSurface(const std::string &path)
     : m_surface(SDL_LoadBMP(path.c_str())) {}
 

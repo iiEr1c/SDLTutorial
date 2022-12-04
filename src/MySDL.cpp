@@ -22,12 +22,39 @@ void MySDL::LoadOrChangeMediaSurface(const std::string &path) {
   }
 }
 
-void MySDL::DisplaySurface() const {
+void MySDL::LoadOrChangeMediaSurfaceWithConvert(const std::string &path) {
+  auto tmp = MySDLSurface(path);
+  if (!tmp.available()) {
+    fmt::print("cann't load {} file\n", path);
+    return;
+  }
+
+  if (m_window.available()) {
+    SDL_Surface *window_surface = SDL_ConvertSurface(
+        tmp.getSurfacePtr(), m_window.getWindowSurfacePtr()->format, 0);
+    if (window_surface != nullptr) {
+      m_surface = MySDLSurface(window_surface);
+    }
+  }
+}
+
+void MySDL::UpdateSurface() const {
   if (m_window.available() && m_surface.available()) {
     SDL_BlitSurface(m_surface.getSurfacePtr(), nullptr,
-                    SDL_GetWindowSurface(m_window.getWindowPtr()), nullptr);
-    SDL_UpdateWindowSurface(m_window.getWindowPtr());
+                    m_window.getWindowSurfacePtr(), nullptr);
   }
+}
+
+void MySDL::ScaledSurface(int xPos, int yPos, int weight, int height) const {
+  if (m_window.available() && m_surface.available()) {
+    SDL_Rect stretchRect{.x = xPos, .y = yPos, .w = weight, .h = height};
+    SDL_BlitScaled(m_surface.getSurfacePtr(), nullptr,
+                   m_window.getWindowSurfacePtr(), std::addressof(stretchRect));
+  }
+}
+
+void MySDL::Display() const {
+  SDL_UpdateWindowSurface(m_window.getWindowPtr());
 }
 
 void MySDL::LoopAndWaitEvent() {
@@ -40,7 +67,7 @@ void MySDL::LoopAndWaitEvent() {
       }
     }
 
-    DisplaySurface();
+    Display();
   }
 }
 

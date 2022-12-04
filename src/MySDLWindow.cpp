@@ -37,5 +37,9 @@ MySDLWindow &MySDLWindow::operator=(MySDLWindow &&rhs) {
 
 SDL_Window *MySDLWindow::getWindowPtr() const { return m_window; }
 
+SDL_Surface *MySDLWindow::getWindowSurfacePtr() const {
+  return SDL_GetWindowSurface(getWindowPtr());
+}
+
 bool MySDLWindow::available() const { return m_window != nullptr; }
 } // namespace HF

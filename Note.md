@@ -32,3 +32,10 @@ window -> SDL_GetWindowSurface -> (渲染) -> SDL_BlitSurface(surface_ptr, nullp
 
 # LESSON 04 [键盘事件]
 键盘事件相对简单, 其实就是处理SDL的```SDL_KEYDOWN```类型的事件, 事件源内附有对应的按键的动作(按下但没松开/松开/重复/长按等). 复用上一章节的代码即可. 这里需要修改上一章节的接口, 应需要额外传入事件源的信息. 这里更新了回调接口```std::function<void(const std::shared_ptr<MySDL> &, const SDL_Event &)>```.
+
+潜在问题: 这里每次切换按键时, 都需要重新从磁盘load文件进内存, 是否应该做一个类似缓存一样的操作, 即只load一次.
+
+# LESSON 05 [surface的拉伸&屏幕适应]
+按照Tutorial的样例, 需要队load bmp图片生成的```SDL_Surface *```做一次```SDL_ConvertSurface```转换, 将其转换为适应屏幕的```SDL_Surface *```, 这么做的目的是优化生成的```SDL_Surface *```所指向的对象.
+
+另外, SDL还提供了图片Scale接口.
