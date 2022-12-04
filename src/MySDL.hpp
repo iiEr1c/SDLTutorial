@@ -3,7 +3,9 @@
 #include "SDL.h"
 
 #include "MySDLEvent.hpp"
+#include "MySDLRender.hpp"
 #include "MySDLSurface.hpp"
+#include "MySDLTexture.hpp"
 #include "MySDLWindow.hpp"
 
 #include <atomic>
@@ -15,6 +17,9 @@ namespace HF {
 class MySDL : public std::enable_shared_from_this<MySDL> {
   MySDLWindow m_window;
   MySDLSurface m_surface;
+  std::shared_ptr<MySDLRender> m_render;
+  MySDLTexture m_texture;
+
   std::unordered_map<uint32_t, MySDLEvent> m_events;
 
   std::atomic_flag quit = false;
@@ -29,14 +34,20 @@ public:
   void CreateWindow(const char *title, int xPos, int yPos, int weight,
                     int height, uint32_t flags);
 
+  void CreateRenderer();
+
   /* 依赖于内部的m_window != nullptr */
   void LoadOrChangeMediaSurface(const std::string &);
 
   void LoadOrChangeMediaSurfaceWithConvert(const std::string &);
 
+  void LoadOrChangeMediaToTexture(const std::string &);
+
   /* display surface, src = m_surface, 即上下文在MySDL这个类中定义了,
    * 是否有更好的方案 */
   void UpdateSurface() const;
+
+  void UpdateTexture() const;
 
   /* 目前提供修改dst surface的stretch rect接口 */
   void ScaledSurface(int xPos, int yPos, int weight, int height) const;

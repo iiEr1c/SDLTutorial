@@ -22,12 +22,12 @@ MySDLSurface::~MySDLSurface() {
   if (m_surface != nullptr) {
     SDL_FreeSurface(m_surface);
   }
-  m_surface = nullptr;
 }
 
-MySDLSurface::MySDLSurface(MySDLSurface &&rhs) : m_surface{rhs.m_surface} {}
+MySDLSurface::MySDLSurface(MySDLSurface &&rhs) noexcept
+    : m_surface{std::exchange(rhs.m_surface, nullptr)} {}
 
-MySDLSurface &MySDLSurface::operator=(MySDLSurface &&rhs) {
+MySDLSurface &MySDLSurface::operator=(MySDLSurface &&rhs) noexcept {
   if (m_surface != nullptr) {
     SDL_FreeSurface(m_surface);
   }

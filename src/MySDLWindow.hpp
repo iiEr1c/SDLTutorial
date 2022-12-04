@@ -17,9 +17,9 @@ public:
 
   MySDLWindow &operator=(const MySDLWindow &) = delete;
 
-  MySDLWindow(MySDLWindow &&);
+  MySDLWindow(MySDLWindow &&) noexcept;
 
-  MySDLWindow &operator=(MySDLWindow &&);
+  MySDLWindow &operator=(MySDLWindow &&) noexcept;
 
   SDL_Window *getWindowPtr() const;
 

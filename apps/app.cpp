@@ -6,6 +6,7 @@ int main() {
   auto sdl = std::make_shared<HF::MySDL>();
   sdl->CreateWindow("demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                     weight, height, 0);
+  sdl->CreateRenderer();
   sdl->RegisterEvent(SDL_QUIT, [](const std::shared_ptr<HF::MySDL> &mysdl,
                                   const SDL_Event &event) {
     mysdl->LoadOrChangeMediaSurfaceWithConvert(
@@ -18,27 +19,28 @@ int main() {
                                      const SDL_Event &event) {
     switch (event.key.keysym.sym) {
     case SDLK_UP:
-      mysdl->LoadOrChangeMediaSurfaceWithConvert(
-          "/home/eric/code/SDLTutorial/asset/up.bmp");
+      mysdl->LoadOrChangeMediaToTexture(
+          "/home/eric/code/SDLTutorial/asset/texture.png");
       break;
     case SDLK_DOWN:
-      mysdl->LoadOrChangeMediaSurfaceWithConvert(
-          "/home/eric/code/SDLTutorial/asset/down.bmp");
+      mysdl->LoadOrChangeMediaToTexture(
+          "/home/eric/code/SDLTutorial/asset/texture.png");
       break;
     case SDLK_LEFT:
-      mysdl->LoadOrChangeMediaSurfaceWithConvert(
-          "/home/eric/code/SDLTutorial/asset/left.bmp");
+      mysdl->LoadOrChangeMediaToTexture(
+          "/home/eric/code/SDLTutorial/asset/texture.png");
       break;
     case SDLK_RIGHT:
-      mysdl->LoadOrChangeMediaSurfaceWithConvert(
-          "/home/eric/code/SDLTutorial/asset/right.bmp");
+      mysdl->LoadOrChangeMediaToTexture(
+          "/home/eric/code/SDLTutorial/asset/texture.png");
       break;
     default:
-      mysdl->LoadOrChangeMediaSurfaceWithConvert(
+      mysdl->LoadOrChangeMediaToTexture(
           "/home/eric/code/SDLTutorial/asset/loaded.png");
       break;
     }
-    mysdl->UpdateSurface();
+
+    mysdl->UpdateTexture();
   });
 
   sdl->LoopAndWaitEvent();

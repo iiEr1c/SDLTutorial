@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SDL.h"
+#include <fmt/core.h>
 
 #include <functional>
 #include <memory>
@@ -23,14 +24,16 @@ public:
   MySDLEvent(const MySDLEvent &) = delete;
   MySDLEvent &operator=(const MySDLEvent &) = delete;
 
-  MySDLEvent(MySDLEvent &&);
-  MySDLEvent &operator=(MySDLEvent &&);
+  MySDLEvent(MySDLEvent &&) noexcept;
+  MySDLEvent &operator=(MySDLEvent &&) noexcept;
 
   /* 函数对象 */
   inline void operator()(const SDL_Event &event) {
     auto ptr = m_weak_sdl.lock();
     if (ptr != nullptr) {
       m_callback(ptr, event);
+    } else {
+      fmt::print("sdl object has released.\n");
     }
   }
 };

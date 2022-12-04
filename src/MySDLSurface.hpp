@@ -24,9 +24,9 @@ public:
 
   MySDLSurface &operator=(const MySDLSurface &) = delete;
 
-  MySDLSurface(MySDLSurface &&);
+  MySDLSurface(MySDLSurface &&) noexcept;
 
-  MySDLSurface &operator=(MySDLSurface &&);
+  MySDLSurface &operator=(MySDLSurface &&) noexcept;
 
   SDL_Surface *getSurfacePtr() const;
 

@@ -10,11 +10,11 @@ MySDLEvent::MySDLEvent(const std::shared_ptr<MySDL> &ptr,
 
 MySDLEvent::~MySDLEvent() {}
 
-MySDLEvent::MySDLEvent(MySDLEvent &&rhs)
+MySDLEvent::MySDLEvent(MySDLEvent &&rhs) noexcept
     : m_weak_sdl(std::move(rhs.m_weak_sdl)),
       m_callback(std::move(rhs.m_callback)) {}
 
-MySDLEvent &MySDLEvent::operator=(MySDLEvent &&rhs) {
+MySDLEvent &MySDLEvent::operator=(MySDLEvent &&rhs) noexcept {
   m_weak_sdl = std::move(rhs.m_weak_sdl);
   m_callback = std::move(rhs.m_callback);
   return *this;

@@ -20,14 +20,13 @@ MySDLWindow::MySDLWindow(const char *title, int xPos, int yPos, int weight,
 MySDLWindow::~MySDLWindow() {
   if (m_window != nullptr) {
     SDL_DestroyWindow(m_window);
-    m_window = nullptr;
   }
 }
 
-MySDLWindow::MySDLWindow(MySDLWindow &&rhs)
-    : m_window(std::exchange(rhs.m_window, nullptr)) {}
+MySDLWindow::MySDLWindow(MySDLWindow &&rhs) noexcept
+    : m_window{std::exchange(rhs.m_window, nullptr)} {}
 
-MySDLWindow &MySDLWindow::operator=(MySDLWindow &&rhs) {
+MySDLWindow &MySDLWindow::operator=(MySDLWindow &&rhs) noexcept {
   if (m_window != nullptr) {
     SDL_DestroyWindow(m_window);
   }

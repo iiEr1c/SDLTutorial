@@ -1,5 +1,6 @@
 #include "SDL.h"
 #include <fmt/core.h>
+#include <fmt/format.h>
 
 #include "MySDL.hpp"
 
@@ -11,6 +12,14 @@ MySDL::~MySDL() { SDL_Quit(); }
 void MySDL::CreateWindow(const char *title, int xPos, int yPos, int weight,
                          int height, uint32_t flags) {
   m_window = MySDLWindow(title, xPos, yPos, weight, height, flags);
+}
+
+void MySDL::CreateRenderer() {
+  if (m_window.available()) {
+    m_render = std::make_shared<MySDLRender>(m_window.getWindowPtr());
+  } else {
+    fmt::print("please create window before create render.\n");
+  }
 }
 
 void MySDL::Delay(int timeMS) { SDL_Delay(timeMS); }
@@ -38,10 +47,33 @@ void MySDL::LoadOrChangeMediaSurfaceWithConvert(const std::string &path) {
   }
 }
 
+void MySDL::LoadOrChangeMediaToTexture(const std::string &path) {
+  auto tmpSurface = MySDLSurface(path);
+  if (!tmpSurface.available()) {
+    fmt::print("cann't load {} file\n", path);
+    return;
+  }
+
+  if (m_render->available()) {
+    m_texture = MySDLTexture(m_render, std::move(tmpSurface));
+  } else {
+    fmt::print("Load {} to Texture failed.\n", path);
+  }
+}
+
 void MySDL::UpdateSurface() const {
   if (m_window.available() && m_surface.available()) {
     SDL_BlitSurface(m_surface.getSurfacePtr(), nullptr,
                     m_window.getWindowSurfacePtr(), nullptr);
+  }
+}
+
+void MySDL::UpdateTexture() const {
+  if (m_render->available() && m_texture.available()) {
+    SDL_RenderClear(m_render->getRendererPtr());
+    SDL_RenderCopy(m_render->getRendererPtr(), m_texture.getTexturePtr(),
+                   nullptr, nullptr);
+    SDL_RenderPresent(m_render->getRendererPtr());
   }
 }
 
