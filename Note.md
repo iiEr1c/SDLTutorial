@@ -40,7 +40,9 @@ window -> SDL_GetWindowSurface -> (渲染) -> SDL_BlitSurface(surface_ptr, nullp
 
 另外, SDL还提供了图片Scale接口.
 
-# LESSON 07 [SDL_Image]
+# LESSON 06 [SDL_Image]
+
+使用SDL_image加载其他格式(png)图片.
 
 ```shell
 sudo apt install libsdl2-image-dev
@@ -54,3 +56,6 @@ target_link_libraries(Exe ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
 
 ## reference
 + [SDL环境配置](https://github.com/trenki2/SDL2Test)
+
+# LESSON 07 [如何使用SDL加载PNG图片]
+

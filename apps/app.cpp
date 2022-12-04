@@ -35,10 +35,10 @@ int main() {
       break;
     default:
       mysdl->LoadOrChangeMediaSurfaceWithConvert(
-          "/home/eric/code/SDLTutorial/asset/press.bmp");
+          "/home/eric/code/SDLTutorial/asset/loaded.png");
       break;
     }
-    mysdl->ScaledSurface(0, 0, weight, height);
+    mysdl->UpdateSurface();
   });
 
   sdl->LoopAndWaitEvent();

@@ -1,5 +1,6 @@
 #include "MySDLSurface.hpp"
 
+#include <string_view>
 #include <utility>
 
 namespace HF {
@@ -7,8 +8,15 @@ MySDLSurface::MySDLSurface() {}
 
 MySDLSurface::MySDLSurface(SDL_Surface *surface) : m_surface{surface} {}
 
-MySDLSurface::MySDLSurface(const std::string &path)
-    : m_surface(SDL_LoadBMP(path.c_str())) {}
+MySDLSurface::MySDLSurface(const std::string &path) : m_surface{nullptr} {
+  /* 根据后缀分流 */
+  std::string_view pathSV = path;
+  if (pathSV.ends_with(".bmp")) {
+    m_surface = SDL_LoadBMP(path.c_str());
+  } else if (pathSV.ends_with(".png")) {
+    m_surface = IMG_Load(path.c_str());
+  }
+}
 
 MySDLSurface::~MySDLSurface() {
   if (m_surface != nullptr) {
