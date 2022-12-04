@@ -39,3 +39,18 @@ window -> SDL_GetWindowSurface -> (渲染) -> SDL_BlitSurface(surface_ptr, nullp
 按照Tutorial的样例, 需要队load bmp图片生成的```SDL_Surface *```做一次```SDL_ConvertSurface```转换, 将其转换为适应屏幕的```SDL_Surface *```, 这么做的目的是优化生成的```SDL_Surface *```所指向的对象.
 
 另外, SDL还提供了图片Scale接口.
+
+# LESSON 07 [SDL_Image]
+
+```shell
+sudo apt install libsdl2-image-dev
+```
+
+CMake需要添加
+find_package(SDL2_image REQUIRED)
+头文件&链接也需要额外添加
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
+target_link_libraries(Exe ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+
+## reference
++ [SDL环境配置](https://github.com/trenki2/SDL2Test)

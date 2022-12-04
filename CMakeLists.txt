@@ -56,8 +56,9 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 #set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
 set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
 
-
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
 
 # The compiled library code is here
 add_subdirectory(src)

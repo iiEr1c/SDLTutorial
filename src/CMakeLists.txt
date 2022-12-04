@@ -14,6 +14,6 @@ SET(MYSDL_SRC
 
 add_library(MySDL ${MYSDL_HEAD} ${MYSDL_SRC})
 
-target_include_directories(MySDL PUBLIC ./ ${SDL2_INCLUDE_DIRS})
+target_include_directories(MySDL PUBLIC ./ ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
 
-target_link_libraries(MySDL PRIVATE ${SDL2_LIBRARIES} fmt::fmt)
+target_link_libraries(MySDL PRIVATE ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} fmt::fmt)
