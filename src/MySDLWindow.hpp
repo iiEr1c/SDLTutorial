@@ -4,7 +4,7 @@ class SDL_Window;
 
 namespace HF {
 class MySDLWindow {
-  SDL_Window *m_window;
+  SDL_Window *m_window = nullptr;
 
 public:
   MySDLWindow();

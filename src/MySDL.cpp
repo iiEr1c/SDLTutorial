@@ -15,13 +15,15 @@ void MySDL::CreateWindow(const char *title, int xPos, int yPos, int weight,
 
 void MySDL::Delay(int timeMS) { SDL_Delay(timeMS); }
 
-void MySDL::LoadMediaToWindowSurface(const std::string &path) {
+void MySDL::LoadOrChangeMediaSurface(const std::string &path) {
   m_surface = MySDLSurface(path);
   if (!m_surface.available()) {
     fmt::print("cann't load {} file\n", path);
   }
+}
 
-  if (m_window.available()) [[likely]] {
+void MySDL::DisplaySurface() const {
+  if (m_window.available() && m_surface.available()) {
     SDL_BlitSurface(m_surface.getSurfacePtr(), nullptr,
                     SDL_GetWindowSurface(m_window.getWindowPtr()), nullptr);
     SDL_UpdateWindowSurface(m_window.getWindowPtr());
@@ -30,10 +32,34 @@ void MySDL::LoadMediaToWindowSurface(const std::string &path) {
   }
 }
 
-void MySDL::loopAndWaitEvent() {
+void MySDL::LoopAndWaitEvent() {
+  SDL_Event event;
   while (!quit.test()) {
-    
+    while (SDL_PollEvent(&event) != 0) {
+      /* handle event */
+      if (auto iter = m_events.find(event.type); iter != m_events.end()) {
+        iter->second();
+      }
+    }
+
+    DisplaySurface();
   }
+}
+
+void MySDL::StopLoop() {
+  quit.test_and_set();
+  quit.notify_all();
+}
+
+void MySDL::RegisterEvent(
+    uint32_t sdlEventType,
+    std::function<void(const std::shared_ptr<MySDL> &)> callback) {
+  MySDLEvent event{shared_from_this(), std::move(callback)};
+  m_events.insert_or_assign(sdlEventType, std::move(event));
+}
+
+void MySDL::UnRegisterEvent(uint32_t sdlEventType) {
+  m_events.erase(sdlEventType);
 }
 
 }; // namespace HF

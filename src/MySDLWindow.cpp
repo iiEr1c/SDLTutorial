@@ -6,7 +6,7 @@
 #include <utility>
 
 namespace HF {
-MySDLWindow::MySDLWindow() : m_window{nullptr} {}
+MySDLWindow::MySDLWindow() {}
 
 MySDLWindow::MySDLWindow(const char *title, int xPos, int yPos, int weight,
                          int height, uint32_t flags)
