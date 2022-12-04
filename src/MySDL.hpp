@@ -41,8 +41,7 @@ public:
 
   void StopLoop();
 
-  void RegisterEvent(uint32_t,
-                     std::function<void(const std::shared_ptr<MySDL> &)>);
+  void RegisterEvent(uint32_t, MySDLEvent::MySDLEventCallbackType);
 
   void UnRegisterEvent(uint32_t);
 };

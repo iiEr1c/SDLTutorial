@@ -27,8 +27,6 @@ void MySDL::DisplaySurface() const {
     SDL_BlitSurface(m_surface.getSurfacePtr(), nullptr,
                     SDL_GetWindowSurface(m_window.getWindowPtr()), nullptr);
     SDL_UpdateWindowSurface(m_window.getWindowPtr());
-  } else {
-    fmt::print("SDL window isn't initial\n");
   }
 }
 
@@ -38,7 +36,7 @@ void MySDL::LoopAndWaitEvent() {
     while (SDL_PollEvent(&event) != 0) {
       /* handle event */
       if (auto iter = m_events.find(event.type); iter != m_events.end()) {
-        iter->second();
+        iter->second(event);
       }
     }
 
@@ -51,9 +49,8 @@ void MySDL::StopLoop() {
   quit.notify_all();
 }
 
-void MySDL::RegisterEvent(
-    uint32_t sdlEventType,
-    std::function<void(const std::shared_ptr<MySDL> &)> callback) {
+void MySDL::RegisterEvent(uint32_t sdlEventType,
+                          MySDLEvent::MySDLEventCallbackType callback) {
   MySDLEvent event{shared_from_this(), std::move(callback)};
   m_events.insert_or_assign(sdlEventType, std::move(event));
 }

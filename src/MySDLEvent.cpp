@@ -5,7 +5,7 @@
 
 namespace HF {
 MySDLEvent::MySDLEvent(const std::shared_ptr<MySDL> &ptr,
-                       std::function<void(const std::shared_ptr<MySDL> &)> func)
+                       MySDLEventCallbackType func)
     : m_weak_sdl(ptr), m_callback(std::move(func)) {}
 
 MySDLEvent::~MySDLEvent() {}
