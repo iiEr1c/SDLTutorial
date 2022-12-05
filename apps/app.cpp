@@ -12,6 +12,7 @@ int main() {
     mysdl->LoadOrChangeMediaSurfaceWithConvert(
         "/home/eric/code/SDLTutorial/asset/exit.bmp");
     mysdl->UpdateSurface();
+    mysdl->Display();
     mysdl->StopLoop();
   });
 
@@ -19,16 +20,9 @@ int main() {
                                      const SDL_Event &event) {
     auto key = event.key.keysym.sym;
     if (key == SDLK_UP) {
-      mysdl->LoadOrChangeMediaToTexture(
-          "/home/eric/code/SDLTutorial/asset/viewport.png");
-      SDL_Rect topLeftViewport{
-          .x = 0, .y = 0, .w = weight / 2, .h = height / 2};
-      SDL_RenderSetViewport(mysdl->getRendererPtr(),
-                            std::addressof(topLeftViewport));
-      SDL_RenderClear(mysdl->getRendererPtr());
-      SDL_RenderCopy(mysdl->getRendererPtr(), mysdl->getTexturePtr(), nullptr,
-                     nullptr);
-      SDL_RenderPresent(mysdl->getRendererPtr());
+      auto texture = mysdl->LoadOrChangeMediaToTextureWithColorKey(
+          "/home/eric/code/SDLTutorial/asset/foo.png", {0, 0xff, 0xff});
+      texture.render(240, 190);
     } else if (key == SDLK_DOWN) {
 
     } else if (key == SDLK_LEFT) {
@@ -36,10 +30,12 @@ int main() {
     } else if (key == SDLK_RIGHT) {
 
     } else {
-      mysdl->LoadOrChangeMediaToTexture(
-          "/home/eric/code/SDLTutorial/asset/loaded.png");
-      mysdl->DisplayTexture();
+      auto texture = mysdl->LoadOrChangeMediaToTexture(
+          "/home/eric/code/SDLTutorial/asset/background.png");
+      texture.render(0, 0);
     }
+
+    SDL_RenderPresent(mysdl->getRendererPtr());
   });
 
   sdl->LoopAndWaitEvent();

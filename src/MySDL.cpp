@@ -47,33 +47,40 @@ void MySDL::LoadOrChangeMediaSurfaceWithConvert(const std::string &path) {
   }
 }
 
-void MySDL::LoadOrChangeMediaToTexture(const std::string &path) {
+MySDLTexture MySDL::LoadOrChangeMediaToTexture(const std::string &path) {
   auto tmpSurface = MySDLSurface(path);
   if (!tmpSurface.available()) {
     fmt::print("cann't load {} file\n", path);
-    return;
+    return {};
   }
 
   if (m_render != nullptr && m_render->available()) {
-    m_texture = MySDLTexture(m_render, std::move(tmpSurface));
-  } else {
-    fmt::print("Load {} to Texture failed.\n", path);
+    return MySDLTexture(m_render, std::move(tmpSurface));
   }
+  fmt::print("Load {} to Texture failed.\n", path);
+  return {};
+}
+
+MySDLTexture
+MySDL::LoadOrChangeMediaToTextureWithColorKey(const std::string &path,
+                                              std::tuple<int, int, int> color) {
+  auto tmpSurface = MySDLSurface(path);
+  if (!tmpSurface.available()) {
+    fmt::print("cann't load {} file\n", path);
+    return {};
+  }
+
+  if (m_render != nullptr && m_render->available()) {
+    return MySDLTexture(m_render, std::move(tmpSurface), std::move(color));
+  }
+  fmt::print("Load {} to Texture failed.\n", path);
+  return {};
 }
 
 void MySDL::UpdateSurface() const {
   if (m_window.available() && m_surface.available()) {
     SDL_BlitSurface(m_surface.getSurfacePtr(), nullptr,
                     m_window.getWindowSurfacePtr(), nullptr);
-  }
-}
-
-void MySDL::DisplayTexture() const {
-  if (m_render != nullptr && m_render->available() && m_texture.available()) {
-    SDL_RenderClear(m_render->getRendererPtr());
-    SDL_RenderCopy(m_render->getRendererPtr(), m_texture.getTexturePtr(),
-                   nullptr, nullptr);
-    SDL_RenderPresent(m_render->getRendererPtr());
   }
 }
 
@@ -104,6 +111,8 @@ void MySDL::LoopAndWaitEvent() {
         iter->second(event);
       }
     }
+
+    // SDL_RenderPresent(m_render->getRendererPtr());
   }
 }
 
@@ -125,6 +134,4 @@ void MySDL::UnRegisterEvent(uint32_t sdlEventType) {
 SDL_Renderer *MySDL::getRendererPtr() const {
   return m_render->getRendererPtr();
 }
-
-SDL_Texture *MySDL::getTexturePtr() const { return m_texture.getTexturePtr(); }
 }; // namespace HF

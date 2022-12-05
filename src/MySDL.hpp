@@ -18,7 +18,6 @@ class MySDL : public std::enable_shared_from_this<MySDL> {
   MySDLWindow m_window;
   MySDLSurface m_surface;
   std::shared_ptr<MySDLRender> m_render;
-  MySDLTexture m_texture;
 
   std::unordered_map<uint32_t, MySDLEvent> m_events;
 
@@ -41,13 +40,15 @@ public:
 
   void LoadOrChangeMediaSurfaceWithConvert(const std::string &);
 
-  void LoadOrChangeMediaToTexture(const std::string &);
+  MySDLTexture LoadOrChangeMediaToTexture(const std::string &);
+
+  MySDLTexture
+  LoadOrChangeMediaToTextureWithColorKey(const std::string &,
+                                         std::tuple<int, int, int>);
 
   /* display surface, src = m_surface, 即上下文在MySDL这个类中定义了,
    * 是否有更好的方案 */
   void UpdateSurface() const;
-
-  void DisplayTexture() const;
 
   void DisplayRender() const;
 
@@ -67,7 +68,5 @@ public:
   void UnRegisterEvent(uint32_t);
 
   SDL_Renderer *getRendererPtr() const;
-
-  SDL_Texture *getTexturePtr() const;
 };
 }; // namespace HF
