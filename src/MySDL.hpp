@@ -47,7 +47,9 @@ public:
    * 是否有更好的方案 */
   void UpdateSurface() const;
 
-  void UpdateTexture() const;
+  void DisplayTexture() const;
+
+  void DisplayRender() const;
 
   /* 目前提供修改dst surface的stretch rect接口 */
   void ScaledSurface(int xPos, int yPos, int weight, int height) const;
@@ -63,5 +65,7 @@ public:
   void RegisterEvent(uint32_t, MySDLEvent::MySDLEventCallbackType);
 
   void UnRegisterEvent(uint32_t);
+
+  SDL_Renderer *getRendererPtr() const;
 };
 }; // namespace HF

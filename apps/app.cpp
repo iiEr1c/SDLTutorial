@@ -17,30 +17,25 @@ int main() {
 
   sdl->RegisterEvent(SDL_KEYDOWN, [](const std::shared_ptr<HF::MySDL> &mysdl,
                                      const SDL_Event &event) {
-    switch (event.key.keysym.sym) {
-    case SDLK_UP:
-      mysdl->LoadOrChangeMediaToTexture(
-          "/home/eric/code/SDLTutorial/asset/texture.png");
-      break;
-    case SDLK_DOWN:
-      mysdl->LoadOrChangeMediaToTexture(
-          "/home/eric/code/SDLTutorial/asset/texture.png");
-      break;
-    case SDLK_LEFT:
-      mysdl->LoadOrChangeMediaToTexture(
-          "/home/eric/code/SDLTutorial/asset/texture.png");
-      break;
-    case SDLK_RIGHT:
-      mysdl->LoadOrChangeMediaToTexture(
-          "/home/eric/code/SDLTutorial/asset/texture.png");
-      break;
-    default:
+    auto key = event.key.keysym.sym;
+    if (key == SDLK_UP) {
+      SDL_Rect fillRect{
+          .x = weight / 4, .y = height / 4, .w = weight / 2, .h = height / 2};
+      SDL_RenderClear(mysdl->getRendererPtr());
+      SDL_SetRenderDrawColor(mysdl->getRendererPtr(), 0xFF, 0x00, 0x00, 0xFF);
+      SDL_RenderFillRect(mysdl->getRendererPtr(), std::addressof(fillRect));
+      mysdl->DisplayRender();
+    } else if (key == SDLK_DOWN) {
+
+    } else if (key == SDLK_LEFT) {
+
+    } else if (key == SDLK_RIGHT) {
+
+    } else {
       mysdl->LoadOrChangeMediaToTexture(
           "/home/eric/code/SDLTutorial/asset/loaded.png");
-      break;
+      mysdl->DisplayTexture();
     }
-
-    mysdl->UpdateTexture();
   });
 
   sdl->LoopAndWaitEvent();

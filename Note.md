@@ -19,6 +19,8 @@ sudo apt install libsdl2-dev
 # LESSON 02 [USE SDL SURFACE]
 SDL SURFACE是一个图像数据类型, 它包含了所有图像的所有需要渲染的pixel. 这个渲染是通过CPU来做的, 而非GPU. SURFACE依赖于WindowSurface.
 
+使用的CPU渲染, 而非GPU.
+
 ```shell
 window -> SDL_GetWindowSurface -> (渲染) -> SDL_BlitSurface(surface_ptr, nullptr, window_ptr, nullptr) & SDL_UpdateWindowSurface(刷新屏幕)
 
@@ -59,5 +61,14 @@ target_link_libraries(Exe ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
 
 # LESSON 07 [如何使用SDL加载PNG图片]
 
+GPU渲染.
+
 使用SDL_Renderer渲染SDL_Texture.
 注意: 使用SDL_Render时, 首先需要初始化```SDL_SetRenderDrawColor(...)```, 其次需要```IMG_Init(IMG_INIT_PNG)```初始化PNG(也许我理解有误). 然后才能正常的渲染.
+
+# LESSON 08 [Geometry Rendering]
+几何渲染, 类似于之前学的OpenGL. 和OpenGL类似, 对于屏幕而言, 左上角为起点.
+
+这里简单的使用按键来做图形的渲染.
+
+对于Render来说, 有颜色、形状、甚至可以texture属性, 更新状态然后刷新即可显示出来.

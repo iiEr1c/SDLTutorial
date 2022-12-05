@@ -68,11 +68,17 @@ void MySDL::UpdateSurface() const {
   }
 }
 
-void MySDL::UpdateTexture() const {
+void MySDL::DisplayTexture() const {
   if (m_render != nullptr && m_render->available() && m_texture.available()) {
     SDL_RenderClear(m_render->getRendererPtr());
     SDL_RenderCopy(m_render->getRendererPtr(), m_texture.getTexturePtr(),
                    nullptr, nullptr);
+    SDL_RenderPresent(m_render->getRendererPtr());
+  }
+}
+
+void MySDL::DisplayRender() const {
+  if (m_render != nullptr && m_render->available()) {
     SDL_RenderPresent(m_render->getRendererPtr());
   }
 }
@@ -98,8 +104,6 @@ void MySDL::LoopAndWaitEvent() {
         iter->second(event);
       }
     }
-
-    Display();
   }
 }
 
@@ -118,4 +122,7 @@ void MySDL::UnRegisterEvent(uint32_t sdlEventType) {
   m_events.erase(sdlEventType);
 }
 
+SDL_Renderer *MySDL::getRendererPtr() const {
+  return m_render->getRendererPtr();
+}
 }; // namespace HF
