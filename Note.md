@@ -92,3 +92,39 @@ GPU渲染.
 
 # LESSON 13 [透明度]
 修改texture的透明度(alpha), 其实就是对API(```SDL_SetTextureAlphaMod```)的使用.
+
+# LESSON 14 [生成动画]
+通过短时间内渲染图片让眼睛错认为是动画.教程里提示需要在创建windows时添加flag:```SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC```
+
+本质上其实就是可以custom specify input texture's rectangle.(见MySDLTexture::render函数)
+
+这里遇到一个问题(貌似C++23的std::move_only_function可以解决?我也不确定):
+
+```C++
+#include <functional>
+
+struct Object {
+  Object() {}
+  ~Object() {}
+  Object(const Object &) = delete;
+  Object &operator=(const Object &) = delete;
+  Object(Object &&) noexcept {}
+  Object &operator=(Object &&) noexcept { return *this; }
+};
+
+void func(std::function<void()> fn) {
+  fn();
+  fn();
+}
+
+/* g++编译则会报错 */
+int main() {
+  Object obj;
+  auto tmp = std::move(obj); // 编译不会报错
+  // func([obj = std::move(obj)]() {}); // g++编译则会报错
+  return 0;
+}
+```
+
+解决方案是使用std::shared_ptr做proxy, 因为std::shared_ptr是copyable的, 即可通过编译, 但多复制了一次(当然可以捕获引用, 但目的是构造闭包, 引用捕获则需要考虑悬垂引用的问题)
+

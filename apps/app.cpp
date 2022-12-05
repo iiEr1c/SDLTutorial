@@ -1,11 +1,14 @@
 #include "MySDL.hpp"
 
+#include <vector>
+
 int main() {
   constexpr static int weight = 640;
   constexpr static int height = 480;
   auto sdl = std::make_shared<HF::MySDL>();
   sdl->CreateWindow("demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                    weight, height, 0);
+                    weight, height,
+                    SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   sdl->CreateRenderer();
   sdl->RegisterEvent(SDL_QUIT, [](const std::shared_ptr<HF::MySDL> &mysdl,
                                   const SDL_Event &event) {
@@ -16,30 +19,50 @@ int main() {
     mysdl->StopLoop();
   });
 
-  sdl->RegisterEvent(SDL_KEYDOWN, [](const std::shared_ptr<HF::MySDL> &mysdl,
-                                     const SDL_Event &event) {
-    auto key = event.key.keysym.sym;
-    auto texture = mysdl->LoadOrChangeMediaToTextureWithColorKey(
-        "/home/eric/code/SDLTutorial/asset/foo.png", {0, 0xff, 0xff});
-    if (key == SDLK_UP) {
-      texture.render(288, 0); // 上
+  /* 带额外状态的回调 */
+  auto tmpBackground = sdl->LoadOrChangeMediaToTexture(
+      "/home/eric/code/SDLTutorial/asset/background.png");
+  auto background =
+      std::make_shared<HF::MySDLTexture>(std::move(tmpBackground));
+  auto tmpTexture = sdl->LoadOrChangeMediaToTextureWithColorKey(
+      "/home/eric/code/SDLTutorial/asset/foo.png", {0, 0xff, 0xff});
+  /* 因为func捕获这里不能move, 所以增加shared_ptr中间层 */
+  auto SpritesTexture =
+      std::make_shared<HF::MySDLTexture>(std::move(tmpTexture));
+  std::vector<SDL_Rect> frame = {
+      {0, 0, 64, 205}, {64, 0, 64, 205}, {128, 0, 64, 205}, {192, 0, 64, 205}};
+  int animationIndex = 0;
+  sdl->RegisterEvent(
+      SDL_KEYDOWN,
+      [background = std::move(background), texture = std::move(SpritesTexture),
+       frame = std::move(frame),
+       animationIndex = animationIndex](const std::shared_ptr<HF::MySDL> &mysdl,
+                                        const SDL_Event &event) mutable {
+        animationIndex++;
+        animationIndex %= 4;
+        auto key = event.key.keysym.sym;
+        if (key == SDLK_UP) {
+          SDL_RenderClear(mysdl->getRendererPtr());
+          background->render(0, 0);
+          texture->render(288, 0, frame.data() + animationIndex);
+        } else if (key == SDLK_DOWN) {
+          SDL_RenderClear(mysdl->getRendererPtr());
+          background->render(0, 0);
+          texture->render(288, 295, frame.data() + animationIndex);
+        } else if (key == SDLK_LEFT) {
 
-    } else if (key == SDLK_DOWN) {
-      texture.render(288, 352); // 下
-    } else if (key == SDLK_LEFT) {
+        } else if (key == SDLK_RIGHT) {
 
-    } else if (key == SDLK_RIGHT) {
+        } else {
+          auto color = mysdl->LoadOrChangeMediaToTexture(
+              "/home/eric/code/SDLTutorial/asset/colors.png");
+          color.setColor({128, 128, 128});
+          color.setAlpha(128);
+          color.render(0, 0);
+        }
 
-    } else {
-      auto texture = mysdl->LoadOrChangeMediaToTexture(
-          "/home/eric/code/SDLTutorial/asset/colors.png");
-      texture.setColor({128, 128, 128});
-      texture.setAlpha(128);
-      texture.render(0, 0);
-    }
-
-    SDL_RenderPresent(mysdl->getRendererPtr());
-  });
+        SDL_RenderPresent(mysdl->getRendererPtr());
+      });
 
   sdl->LoopAndWaitEvent();
   return 0;

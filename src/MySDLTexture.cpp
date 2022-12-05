@@ -73,12 +73,14 @@ MySDLTexture::~MySDLTexture() {
 
 MySDLTexture::MySDLTexture(MySDLTexture &&rhs) noexcept
     : m_weak_render{std::move(rhs.m_weak_render)}, m_texture{std::exchange(
-                                                       rhs.m_texture,
-                                                       nullptr)} {}
+                                                       rhs.m_texture, nullptr)},
+      m_weight{rhs.m_weight}, m_height{rhs.m_height} {}
 
 MySDLTexture &MySDLTexture::operator=(MySDLTexture &&rhs) noexcept {
   m_weak_render = std::move(rhs.m_weak_render);
   m_texture = std::exchange(rhs.m_texture, nullptr);
+  m_weight = rhs.m_weight;
+  m_height = rhs.m_height;
   return *this;
 }
 
@@ -95,7 +97,7 @@ void MySDLTexture::render(int xPos, int yPos, SDL_Rect *clip /* = nullptr*/) {
       renderQuad.w = clip->w;
       renderQuad.h = clip->h;
     }
-    SDL_RenderCopy(render->getRendererPtr(), m_texture, nullptr,
+    SDL_RenderCopy(render->getRendererPtr(), m_texture, clip,
                    std::addressof(renderQuad));
   }
 }
