@@ -125,4 +125,6 @@ void MySDL::UnRegisterEvent(uint32_t sdlEventType) {
 SDL_Renderer *MySDL::getRendererPtr() const {
   return m_render->getRendererPtr();
 }
+
+SDL_Texture *MySDL::getTexturePtr() const { return m_texture.getTexturePtr(); }
 }; // namespace HF

@@ -19,12 +19,16 @@ int main() {
                                      const SDL_Event &event) {
     auto key = event.key.keysym.sym;
     if (key == SDLK_UP) {
-      SDL_Rect fillRect{
-          .x = weight / 4, .y = height / 4, .w = weight / 2, .h = height / 2};
+      mysdl->LoadOrChangeMediaToTexture(
+          "/home/eric/code/SDLTutorial/asset/viewport.png");
+      SDL_Rect topLeftViewport{
+          .x = 0, .y = 0, .w = weight / 2, .h = height / 2};
+      SDL_RenderSetViewport(mysdl->getRendererPtr(),
+                            std::addressof(topLeftViewport));
       SDL_RenderClear(mysdl->getRendererPtr());
-      SDL_SetRenderDrawColor(mysdl->getRendererPtr(), 0xFF, 0x00, 0x00, 0xFF);
-      SDL_RenderFillRect(mysdl->getRendererPtr(), std::addressof(fillRect));
-      mysdl->DisplayRender();
+      SDL_RenderCopy(mysdl->getRendererPtr(), mysdl->getTexturePtr(), nullptr,
+                     nullptr);
+      SDL_RenderPresent(mysdl->getRendererPtr());
     } else if (key == SDLK_DOWN) {
 
     } else if (key == SDLK_LEFT) {

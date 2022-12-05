@@ -67,5 +67,7 @@ public:
   void UnRegisterEvent(uint32_t);
 
   SDL_Renderer *getRendererPtr() const;
+
+  SDL_Texture *getTexturePtr() const;
 };
 }; // namespace HF
