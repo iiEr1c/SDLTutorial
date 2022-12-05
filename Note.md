@@ -86,3 +86,6 @@ GPU渲染.
 # LESSON 11 [渲染部分texture, 而非整个texture]
 
 这一章节的意思是复用texture, 一个texture可以被render到指定的位置&拉伸(通过4元组{xPos, yPos, weight, height}).
+
+# LESSON 12 [Color Modulation]
+修改texture颜色, 本质是修改rgb三个分量的值以改变颜色, 如果是其他定义?(比如YUV格式, 那么也许有另外的做法, 但原理应该类似?)

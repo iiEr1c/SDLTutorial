@@ -36,5 +36,8 @@ public:
 
   void render(int xPos, int yPos,
               SDL_Rect *clip = nullptr); // 在(xPos, yPos)处渲染texture
+
+  /* 调节rgb三个通道的分量 */
+  void setColor(std::tuple<uint8_t, uint8_t, uint8_t>);
 };
 }; // namespace HF

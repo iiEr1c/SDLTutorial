@@ -99,4 +99,11 @@ void MySDLTexture::render(int xPos, int yPos, SDL_Rect *clip /* = nullptr*/) {
                    std::addressof(renderQuad));
   }
 }
+
+void MySDLTexture::setColor(std::tuple<uint8_t, uint8_t, uint8_t> rgb) {
+  if (m_texture != nullptr) {
+    SDL_SetTextureColorMod(m_texture, std::get<0>(rgb), std::get<1>(rgb),
+                           std::get<2>(rgb));
+  }
+}
 }; // namespace HF
