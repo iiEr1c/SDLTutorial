@@ -40,12 +40,6 @@ public:
 
   void LoadOrChangeMediaSurfaceWithConvert(const std::string &);
 
-  MySDLTexture LoadOrChangeMediaToTexture(const std::string &);
-
-  MySDLTexture
-  LoadOrChangeMediaToTextureWithColorKey(const std::string &,
-                                         std::tuple<int, int, int>);
-
   /* display surface, src = m_surface, 即上下文在MySDL这个类中定义了,
    * 是否有更好的方案 */
   void UpdateSurface() const;
@@ -68,5 +62,7 @@ public:
   void UnRegisterEvent(uint32_t);
 
   SDL_Renderer *getRendererPtr() const;
+
+  std::shared_ptr<MySDLRender> getRendererSharedPtr() const;
 };
 }; // namespace HF

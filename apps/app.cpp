@@ -20,15 +20,14 @@ int main() {
   });
 
   /* 带额外状态的回调 */
-  auto tmpBackground = sdl->LoadOrChangeMediaToTexture(
+  auto background = std::make_shared<HF::MySDLTexture>(
+      sdl->getRendererSharedPtr(),
       "/home/eric/code/SDLTutorial/asset/background.png");
-  auto background =
-      std::make_shared<HF::MySDLTexture>(std::move(tmpBackground));
-  auto tmpTexture = sdl->LoadOrChangeMediaToTextureWithColorKey(
-      "/home/eric/code/SDLTutorial/asset/foo.png", {0, 0xff, 0xff});
-  /* 因为func捕获这里不能move, 所以增加shared_ptr中间层 */
-  auto SpritesTexture =
-      std::make_shared<HF::MySDLTexture>(std::move(tmpTexture));
+
+  auto SpritesTexture = std::make_shared<HF::MySDLTexture>(
+      sdl->getRendererSharedPtr(), "/home/eric/code/SDLTutorial/asset/foo.png",
+      std::make_tuple(0, 0xff, 0xff));
+
   std::vector<SDL_Rect> frame = {
       {0, 0, 64, 205}, {64, 0, 64, 205}, {128, 0, 64, 205}, {192, 0, 64, 205}};
   int animationIndex = 0;
@@ -54,8 +53,9 @@ int main() {
         } else if (key == SDLK_RIGHT) {
 
         } else {
-          auto color = mysdl->LoadOrChangeMediaToTexture(
-              "/home/eric/code/SDLTutorial/asset/colors.png");
+          auto color =
+              HF::MySDLTexture(mysdl->getRendererSharedPtr(),
+                               "/home/eric/code/SDLTutorial/asset/colors.png");
           color.setColor({128, 128, 128});
           color.setAlpha(128);
           color.render(0, 0);

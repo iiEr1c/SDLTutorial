@@ -18,9 +18,10 @@ public:
 
   MySDLTexture(const std::shared_ptr<MySDLRender> &);
 
-  MySDLTexture(const std::shared_ptr<MySDLRender> &, MySDLSurface);
+  MySDLTexture(const std::shared_ptr<MySDLRender> &, const std::string &);
 
-  MySDLTexture(const std::shared_ptr<MySDLRender> &, MySDLSurface,
+  /* with ColorKey */
+  MySDLTexture(const std::shared_ptr<MySDLRender> &, const std::string &,
                std::tuple<int, int, int>);
 
   ~MySDLTexture();
