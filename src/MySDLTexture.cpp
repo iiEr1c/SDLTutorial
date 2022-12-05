@@ -86,10 +86,15 @@ bool MySDLTexture::available() const { return m_texture != nullptr; }
 
 SDL_Texture *MySDLTexture::getTexturePtr() const { return m_texture; }
 
-void MySDLTexture::render(int xPos, int yPos) {
+void MySDLTexture::render(int xPos, int yPos, SDL_Rect *clip /* = nullptr*/) {
   auto render = m_weak_render.lock();
   if (render != nullptr) {
     SDL_Rect renderQuad{.x = xPos, .y = yPos, .w = m_weight, .h = m_height};
+    if (clip != nullptr) {
+      /*  */
+      renderQuad.w = clip->w;
+      renderQuad.h = clip->h;
+    }
     SDL_RenderCopy(render->getRendererPtr(), m_texture, nullptr,
                    std::addressof(renderQuad));
   }

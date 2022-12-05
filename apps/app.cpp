@@ -19,12 +19,13 @@ int main() {
   sdl->RegisterEvent(SDL_KEYDOWN, [](const std::shared_ptr<HF::MySDL> &mysdl,
                                      const SDL_Event &event) {
     auto key = event.key.keysym.sym;
+    auto texture = mysdl->LoadOrChangeMediaToTextureWithColorKey(
+        "/home/eric/code/SDLTutorial/asset/foo.png", {0, 0xff, 0xff});
     if (key == SDLK_UP) {
-      auto texture = mysdl->LoadOrChangeMediaToTextureWithColorKey(
-          "/home/eric/code/SDLTutorial/asset/foo.png", {0, 0xff, 0xff});
-      texture.render(240, 190);
-    } else if (key == SDLK_DOWN) {
+      texture.render(288, 0); // 上
 
+    } else if (key == SDLK_DOWN) {
+      texture.render(288, 352); // 下
     } else if (key == SDLK_LEFT) {
 
     } else if (key == SDLK_RIGHT) {

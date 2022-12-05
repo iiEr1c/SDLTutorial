@@ -34,6 +34,7 @@ public:
   bool available() const;
   SDL_Texture *getTexturePtr() const;
 
-  void render(int xPos, int yPos); // 在(xPos, yPos)处渲染texture
+  void render(int xPos, int yPos,
+              SDL_Rect *clip = nullptr); // 在(xPos, yPos)处渲染texture
 };
 }; // namespace HF

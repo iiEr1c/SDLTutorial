@@ -82,3 +82,7 @@ GPU渲染.
 在屏幕上渲染多个图像时, 我们通常需要具有透明背景的图片.API: ```SDL_SetColorKey```.
 
 在render时, 一定要注意render是有状态的, 且是可以叠加的, 因此需要注意渲染的顺序, 比如这里的应该先渲染background, 再渲染前景, 如果反过来则看不到.
+
+# LESSON 11 [渲染部分texture, 而非整个texture]
+
+这一章节的意思是复用texture, 一个texture可以被render到指定的位置&拉伸(通过4元组{xPos, yPos, weight, height}).
