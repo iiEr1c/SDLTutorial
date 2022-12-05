@@ -24,45 +24,46 @@ int main() {
       sdl->getRendererSharedPtr(),
       "/home/eric/code/SDLTutorial/asset/background.png");
 
+  std::tuple<uint8_t, uint8_t, uint8_t> ignoreCyan = {0, 0xff, 0xff};
   auto SpritesTexture = std::make_shared<HF::MySDLTexture>(
       sdl->getRendererSharedPtr(), "/home/eric/code/SDLTutorial/asset/foo.png",
-      std::make_tuple(0, 0xff, 0xff));
+      ignoreCyan);
 
   std::vector<SDL_Rect> frame = {
       {0, 0, 64, 205}, {64, 0, 64, 205}, {128, 0, 64, 205}, {192, 0, 64, 205}};
   int animationIndex = 0;
-  sdl->RegisterEvent(
-      SDL_KEYDOWN,
-      [background = std::move(background), texture = std::move(SpritesTexture),
-       frame = std::move(frame),
-       animationIndex = animationIndex](const std::shared_ptr<HF::MySDL> &mysdl,
-                                        const SDL_Event &event) mutable {
-        animationIndex++;
-        animationIndex %= 4;
-        auto key = event.key.keysym.sym;
-        if (key == SDLK_UP) {
-          SDL_RenderClear(mysdl->getRendererPtr());
-          background->render(0, 0);
-          texture->render(288, 0, frame.data() + animationIndex);
-        } else if (key == SDLK_DOWN) {
-          SDL_RenderClear(mysdl->getRendererPtr());
-          background->render(0, 0);
-          texture->render(288, 295, frame.data() + animationIndex);
-        } else if (key == SDLK_LEFT) {
+  sdl->RegisterEvent(SDL_KEYDOWN, [background = std::move(background),
+                                   texture = std::move(SpritesTexture),
+                                   frame = std::move(frame),
+                                   animationIndex = animationIndex](
+                                      const std::shared_ptr<HF::MySDL> &mysdl,
+                                      const SDL_Event &event) mutable {
+    animationIndex++;
+    animationIndex %= 4;
+    constexpr int topLeftX = 0;
+    constexpr int topLeftY = 0;
+    auto key = event.key.keysym.sym;
+    if (key == SDLK_UP) {
+      SDL_RenderClear(mysdl->getRendererPtr());
+      background->render(topLeftX, topLeftY);
+      texture->render(weight / 2, 0, frame.data() + animationIndex);
+    } else if (key == SDLK_DOWN) {
+      SDL_RenderClear(mysdl->getRendererPtr());
+      background->render(topLeftX, topLeftY);
+      texture->render(weight / 2, height / 2, frame.data() + animationIndex);
+    } else if (key == SDLK_LEFT) {
 
-        } else if (key == SDLK_RIGHT) {
+    } else if (key == SDLK_RIGHT) {
 
-        } else {
-          auto color =
-              HF::MySDLTexture(mysdl->getRendererSharedPtr(),
-                               "/home/eric/code/SDLTutorial/asset/colors.png");
-          color.setColor({128, 128, 128});
-          color.setAlpha(128);
-          color.render(0, 0);
-        }
+    } else {
+      auto color =
+          HF::MySDLTexture(mysdl->getRendererSharedPtr(),
+                           "/home/eric/code/SDLTutorial/asset/colors.png");
+      color.render(topLeftX, topLeftY);
+    }
 
-        SDL_RenderPresent(mysdl->getRendererPtr());
-      });
+    SDL_RenderPresent(mysdl->getRendererPtr());
+  });
 
   sdl->LoopAndWaitEvent();
   return 0;

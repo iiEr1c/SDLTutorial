@@ -55,7 +55,8 @@ list(APPEND CXX_FLAGS_RELEASE
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 #set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
-set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
+#set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
+set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*)
 
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 #find_package(SDL2 REQUIRED)
