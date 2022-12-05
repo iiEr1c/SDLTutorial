@@ -29,8 +29,12 @@ int main() {
       sdl->getRendererSharedPtr(), "/home/eric/code/SDLTutorial/asset/foo.png",
       ignoreCyan);
 
-  std::vector<SDL_Rect> frame = {
-      {0, 0, 64, 205}, {64, 0, 64, 205}, {128, 0, 64, 205}, {192, 0, 64, 205}};
+  constexpr int gapPixel = 64;
+  constexpr int heightPixel = 205;
+  std::vector<SDL_Rect> frame = {{0, 0, gapPixel, heightPixel},
+                                 {gapPixel, 0, gapPixel, heightPixel},
+                                 {gapPixel * 2, 0, gapPixel, heightPixel},
+                                 {gapPixel * 3, 0, gapPixel, heightPixel}};
   int animationIndex = 0;
   sdl->RegisterEvent(SDL_KEYDOWN, [background = std::move(background),
                                    texture = std::move(SpritesTexture),
