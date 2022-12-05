@@ -89,3 +89,6 @@ GPU渲染.
 
 # LESSON 12 [Color Modulation]
 修改texture颜色, 本质是修改rgb三个分量的值以改变颜色, 如果是其他定义?(比如YUV格式, 那么也许有另外的做法, 但原理应该类似?)
+
+# LESSON 13 [透明度]
+修改texture的透明度(alpha), 其实就是对API(```SDL_SetTextureAlphaMod```)的使用.

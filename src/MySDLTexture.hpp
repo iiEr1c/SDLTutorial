@@ -39,5 +39,8 @@ public:
 
   /* 调节rgb三个通道的分量 */
   void setColor(std::tuple<uint8_t, uint8_t, uint8_t>);
+
+  /* 透明 */
+  void setAlpha(uint8_t);
 };
 }; // namespace HF

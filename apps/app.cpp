@@ -34,6 +34,7 @@ int main() {
       auto texture = mysdl->LoadOrChangeMediaToTexture(
           "/home/eric/code/SDLTutorial/asset/colors.png");
       texture.setColor({128, 128, 128});
+      texture.setAlpha(128);
       texture.render(0, 0);
     }
 

@@ -106,4 +106,10 @@ void MySDLTexture::setColor(std::tuple<uint8_t, uint8_t, uint8_t> rgb) {
                            std::get<2>(rgb));
   }
 }
+
+void MySDLTexture::setAlpha(uint8_t alpha) {
+  if (m_texture != nullptr) {
+    SDL_SetTextureAlphaMod(m_texture, alpha);
+  }
+}
 }; // namespace HF
