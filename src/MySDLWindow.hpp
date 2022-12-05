@@ -1,6 +1,6 @@
 #pragma once
 
-class SDL_Window;
+#include "SDL.h"
 
 namespace HF {
 class MySDLWindow {

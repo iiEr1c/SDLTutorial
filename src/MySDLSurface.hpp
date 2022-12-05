@@ -3,8 +3,6 @@
 #include "SDL.h"
 #include "SDL_image.h"
 
-class SDL_Surface;
-
 #include <string>
 
 namespace HF {
