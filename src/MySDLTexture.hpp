@@ -34,8 +34,10 @@ public:
   bool available() const;
   SDL_Texture *getTexturePtr() const;
 
-  void render(int xPos, int yPos,
-              SDL_Rect *clip = nullptr); // 在(xPos, yPos)处渲染texture
+  /* 带有旋转/翻转的render */
+  void render(int xPos, int yPos, SDL_Rect *clip = nullptr, double angle = 0.0,
+              SDL_Point *center = nullptr,
+              SDL_RendererFlip flip = SDL_FLIP_NONE);
 
   /* 调节rgb三个通道的分量 */
   void setColor(std::tuple<uint8_t, uint8_t, uint8_t>);

@@ -88,7 +88,10 @@ bool MySDLTexture::available() const { return m_texture != nullptr; }
 
 SDL_Texture *MySDLTexture::getTexturePtr() const { return m_texture; }
 
-void MySDLTexture::render(int xPos, int yPos, SDL_Rect *clip /* = nullptr*/) {
+void MySDLTexture::render(int xPos, int yPos, SDL_Rect *clip /*= nullptr*/,
+                          double angle /* = 0.0*/,
+                          SDL_Point *center /*= nullptr*/,
+                          SDL_RendererFlip flip /* = SDL_FLIP_NONE*/) {
   auto render = m_weak_render.lock();
   if (render != nullptr) {
     SDL_Rect renderQuad{.x = xPos, .y = yPos, .w = m_weight, .h = m_height};
@@ -97,8 +100,8 @@ void MySDLTexture::render(int xPos, int yPos, SDL_Rect *clip /* = nullptr*/) {
       renderQuad.w = clip->w;
       renderQuad.h = clip->h;
     }
-    SDL_RenderCopy(render->getRendererPtr(), m_texture, clip,
-                   std::addressof(renderQuad));
+    SDL_RenderCopyEx(render->getRendererPtr(), m_texture, clip,
+                     std::addressof(renderQuad), angle, center, flip);
   }
 }
 

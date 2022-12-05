@@ -128,3 +128,10 @@ int main() {
 
 解决方案是使用std::shared_ptr做proxy, 因为std::shared_ptr是copyable的, 即可通过编译, 但多复制了一次(当然可以捕获引用, 但目的是构造闭包, 引用捕获则需要考虑悬垂引用的问题)
 
+# LESSON 15 [旋转和翻转]
+
+这一章节主要介绍SDL的api ```SDL_RenderCopyEx```, api包括旋转的角度和是否要翻转, 翻转的选项包括: 不翻转/水平/竖直三种.
+
+```C++
+int SDL_RenderCopyEx(SDL_Renderer *renderer, SDL_Texture *texture, const SDL_Rect *srcrect, const SDL_Rect *dstrect, const double angle, const SDL_Point *center, const SDL_RendererFlip flip);
+```
