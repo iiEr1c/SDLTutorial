@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.25)
 
 project(SDLTutorial VERSION 0.1
                  DESCRIPTION "SDLTutorial"
                  LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
@@ -55,13 +55,13 @@ list(APPEND CXX_FLAGS_RELEASE
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 #set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
-set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
+#set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
 
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 #find_package(SDL2 REQUIRED)
 #find_package(SDL2_image REQUIRED)
 INCLUDE(FindPkgConfig)
-PKG_SEARCH_MODULE(SDL2 REQUIRED)
+PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
 PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
 PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
 

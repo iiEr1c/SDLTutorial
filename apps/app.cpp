@@ -20,14 +20,14 @@ int main() {
   });
 
   /* 带额外状态的回调 */
-  auto background = std::make_shared<HF::MySDLTexture>(
-      sdl->getRendererSharedPtr(),
-      "/home/eric/code/SDLTutorial/asset/background.png");
+  auto background =
+      HF::MySDLTexture(sdl->getRendererSharedPtr(),
+                       "/home/eric/code/SDLTutorial/asset/background.png");
 
   std::tuple<uint8_t, uint8_t, uint8_t> ignoreCyan = {0, 0xff, 0xff};
-  auto SpritesTexture = std::make_shared<HF::MySDLTexture>(
-      sdl->getRendererSharedPtr(), "/home/eric/code/SDLTutorial/asset/foo.png",
-      ignoreCyan);
+  auto SpritesTexture =
+      HF::MySDLTexture(sdl->getRendererSharedPtr(),
+                       "/home/eric/code/SDLTutorial/asset/foo.png", ignoreCyan);
 
   constexpr int gapPixel = 64;
   constexpr int heightPixel = 205;
@@ -49,21 +49,18 @@ int main() {
     auto key = event.key.keysym.sym;
     if (key == SDLK_UP) {
       SDL_RenderClear(mysdl->getRendererPtr());
-      background->render(topLeftX, topLeftY);
-      texture->render(weight / 2, 0, frame.data() + animationIndex);
+      background.render(topLeftX, topLeftY);
+      texture.render(weight / 2, 0, frame.data() + animationIndex);
     } else if (key == SDLK_DOWN) {
       SDL_RenderClear(mysdl->getRendererPtr());
-      background->render(topLeftX, topLeftY);
-      texture->render(weight / 2, height / 2, frame.data() + animationIndex);
+      background.render(topLeftX, topLeftY);
+      texture.render(weight / 2, height / 2, frame.data() + animationIndex);
     } else if (key == SDLK_LEFT) {
 
     } else if (key == SDLK_RIGHT) {
 
     } else {
-      auto color =
-          HF::MySDLTexture(mysdl->getRendererSharedPtr(),
-                           "/home/eric/code/SDLTutorial/asset/colors.png");
-      color.render(topLeftX, topLeftY);
+      background.render(topLeftX, topLeftY);
     }
 
     SDL_RenderPresent(mysdl->getRendererPtr());

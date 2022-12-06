@@ -11,8 +11,8 @@ class MySDL;
 
 class MySDLEvent {
 public:
-  using MySDLEventCallbackType =
-      std::function<void(const std::shared_ptr<MySDL> &, const SDL_Event &)>;
+  using MySDLEventCallbackType = std::move_only_function<void(
+      const std::shared_ptr<MySDL> &, const SDL_Event &)>;
 
 private:
   std::weak_ptr<MySDL> m_weak_sdl;

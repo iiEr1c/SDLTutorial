@@ -98,7 +98,7 @@ GPU渲染.
 
 本质上其实就是可以custom specify input texture's rectangle.(见MySDLTexture::render函数)
 
-这里遇到一个问题(貌似C++23的std::move_only_function可以解决?我也不确定):
+这里遇到一个问题(貌似C++23的std::move_only_function可以解决,~~我也不确定~~:
 
 ```C++
 #include <functional>
@@ -121,7 +121,7 @@ void func(std::function<void()> fn) {
 int main() {
   Object obj;
   auto tmp = std::move(obj); // 编译不会报错
-  // func([obj = std::move(obj)]() {}); // g++编译则会报错
+  func([obj = std::move(obj)]() {}); // g++编译则会报错
   return 0;
 }
 ```
@@ -135,3 +135,34 @@ int main() {
 ```C++
 int SDL_RenderCopyEx(SDL_Renderer *renderer, SDL_Texture *texture, const SDL_Rect *srcrect, const SDL_Rect *dstrect, const double angle, const SDL_Point *center, const SDL_RendererFlip flip);
 ```
+
+# LESSON 16 [True Type Font]
+安装SDL2TTF扩展:
+```shell
+sudo apt -y install libsdl2-ttf-dev
+```
+更新配置文件:
+```shell
+# cmake configuration
+INCLUDE(FindPkgConfig)
+PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
+PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(SOURCE_FILES main.cpp)
+
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    include ${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS})
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${SDL2TTF_LIBRARIES})
+```
+
+## reference
++ [TrueType](https://en.wikipedia.org/wiki/TrueType)
++ [ubuntu SDLttf cmakelists](https://stackoverflow.com/questions/58107854/cmake-is-unable-to-find-sdl2-ttf-im-trying-to-link-it-the-same-way-i-would-wit)
