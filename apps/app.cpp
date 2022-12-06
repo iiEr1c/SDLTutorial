@@ -36,35 +36,35 @@ int main() {
                                  {gapPixel * 2, 0, gapPixel, heightPixel},
                                  {gapPixel * 3, 0, gapPixel, heightPixel}};
   int animationIndex = 0;
-  sdl->RegisterEvent(SDL_KEYDOWN, [background = std::move(background),
-                                   texture = std::move(SpritesTexture),
-                                   frame = std::move(frame),
-                                   animationIndex = animationIndex](
-                                      const std::shared_ptr<HF::MySDL> &mysdl,
-                                      const SDL_Event &event) mutable {
-    animationIndex++;
-    animationIndex %= 4;
-    constexpr int topLeftX = 0;
-    constexpr int topLeftY = 0;
-    auto key = event.key.keysym.sym;
-    if (key == SDLK_UP) {
-      SDL_RenderClear(mysdl->getRendererPtr());
-      background.render(topLeftX, topLeftY);
-      texture.render(weight / 2, 0, frame.data() + animationIndex);
-    } else if (key == SDLK_DOWN) {
-      SDL_RenderClear(mysdl->getRendererPtr());
-      background.render(topLeftX, topLeftY);
-      texture.render(weight / 2, height / 2, frame.data() + animationIndex);
-    } else if (key == SDLK_LEFT) {
+  sdl->RegisterEvent(
+      SDL_KEYDOWN,
+      [background = std::move(background), texture = std::move(SpritesTexture),
+       frame = std::move(frame),
+       animationIndex = animationIndex](const std::shared_ptr<HF::MySDL> &mysdl,
+                                        const SDL_Event &event) mutable {
+        animationIndex++;
+        animationIndex %= 4;
+        constexpr int topLeftX = 0;
+        constexpr int topLeftY = 0;
+        auto key = event.key.keysym.sym;
+        if (key == SDLK_UP) {
+          SDL_RenderClear(mysdl->getRendererPtr());
+          background.render(topLeftX, topLeftY);
+          texture.render(weight / 2, 0, frame.data() + animationIndex);
+        } else if (key == SDLK_DOWN) {
+          SDL_RenderClear(mysdl->getRendererPtr());
+          background.render(topLeftX, topLeftY);
+          texture.render(weight / 2, height / 2, frame.data() + animationIndex);
+        } else if (key == SDLK_LEFT) {
 
-    } else if (key == SDLK_RIGHT) {
+        } else if (key == SDLK_RIGHT) {
 
-    } else {
-      background.render(topLeftX, topLeftY);
-    }
+        } else {
+          background.render(topLeftX, topLeftY);
+        }
 
-    SDL_RenderPresent(mysdl->getRendererPtr());
-  });
+        SDL_RenderPresent(mysdl->getRendererPtr());
+      });
 
   sdl->LoopAndWaitEvent();
   return 0;
