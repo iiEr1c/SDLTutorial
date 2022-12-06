@@ -1,15 +1,15 @@
-#include "MySDLTexture.hpp"
+#include "PictureTexture.hpp"
 #include <fmt/core.h>
 
 #include <utility>
 
 namespace HF {
-MySDLTexture::MySDLTexture() {}
+PictureTexture::PictureTexture() {}
 
-MySDLTexture::MySDLTexture(const std::shared_ptr<MySDLRender> &render)
+PictureTexture::PictureTexture(const std::shared_ptr<MySDLRender> &render)
     : m_weak_render{render} {}
 
-MySDLTexture::MySDLTexture(const std::shared_ptr<MySDLRender> &render,
+PictureTexture::PictureTexture(const std::shared_ptr<MySDLRender> &render,
                            const std::string &path)
     : m_weak_render{render} {
   if (render->available()) [[likely]] {
@@ -29,7 +29,7 @@ MySDLTexture::MySDLTexture(const std::shared_ptr<MySDLRender> &render,
 }
 
 /* with ColorKey */
-MySDLTexture::MySDLTexture(const std::shared_ptr<MySDLRender> &render,
+PictureTexture::PictureTexture(const std::shared_ptr<MySDLRender> &render,
                            const std::string &path,
                            std::tuple<int, int, int> color)
     : m_weak_render{render} {
@@ -59,18 +59,18 @@ MySDLTexture::MySDLTexture(const std::shared_ptr<MySDLRender> &render,
   }
 }
 
-MySDLTexture::~MySDLTexture() {
+PictureTexture::~PictureTexture() {
   if (m_texture != nullptr) {
     SDL_DestroyTexture(m_texture);
   }
 }
 
-MySDLTexture::MySDLTexture(MySDLTexture &&rhs) noexcept
+PictureTexture::PictureTexture(PictureTexture &&rhs) noexcept
     : m_weak_render{std::move(rhs.m_weak_render)}, m_texture{std::exchange(
                                                        rhs.m_texture, nullptr)},
       m_weight{rhs.m_weight}, m_height{rhs.m_height} {}
 
-MySDLTexture &MySDLTexture::operator=(MySDLTexture &&rhs) noexcept {
+PictureTexture &PictureTexture::operator=(PictureTexture &&rhs) noexcept {
   m_weak_render = std::move(rhs.m_weak_render);
   m_texture = std::exchange(rhs.m_texture, nullptr);
   m_weight = rhs.m_weight;
@@ -78,11 +78,11 @@ MySDLTexture &MySDLTexture::operator=(MySDLTexture &&rhs) noexcept {
   return *this;
 }
 
-bool MySDLTexture::available() const { return m_texture != nullptr; }
+bool PictureTexture::available() const { return m_texture != nullptr; }
 
-SDL_Texture *MySDLTexture::getTexturePtr() const { return m_texture; }
+SDL_Texture *PictureTexture::getTexturePtr() const { return m_texture; }
 
-void MySDLTexture::render(int xPos, int yPos, SDL_Rect *clip /*= nullptr*/,
+void PictureTexture::render(int xPos, int yPos, SDL_Rect *clip /*= nullptr*/,
                           double angle /* = 0.0*/,
                           SDL_Point *center /*= nullptr*/,
                           SDL_RendererFlip flip /* = SDL_FLIP_NONE*/) {
@@ -99,14 +99,14 @@ void MySDLTexture::render(int xPos, int yPos, SDL_Rect *clip /*= nullptr*/,
   }
 }
 
-void MySDLTexture::setColor(std::tuple<uint8_t, uint8_t, uint8_t> rgb) {
+void PictureTexture::setColor(std::tuple<uint8_t, uint8_t, uint8_t> rgb) {
   if (m_texture != nullptr) {
     SDL_SetTextureColorMod(m_texture, std::get<0>(rgb), std::get<1>(rgb),
                            std::get<2>(rgb));
   }
 }
 
-void MySDLTexture::setAlpha(uint8_t alpha) {
+void PictureTexture::setAlpha(uint8_t alpha) {
   if (m_texture != nullptr) {
     SDL_SetTextureAlphaMod(m_texture, alpha);
   }

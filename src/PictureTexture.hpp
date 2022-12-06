@@ -7,30 +7,30 @@
 #include <tuple>
 
 namespace HF {
-class MySDLTexture {
+class PictureTexture {
   std::weak_ptr<MySDLRender> m_weak_render;
   SDL_Texture *m_texture = nullptr;
   int m_weight = 0;
   int m_height = 0;
 
 public:
-  MySDLTexture();
+  PictureTexture();
 
-  MySDLTexture(const std::shared_ptr<MySDLRender> &);
+  PictureTexture(const std::shared_ptr<MySDLRender> &);
 
-  MySDLTexture(const std::shared_ptr<MySDLRender> &, const std::string &);
+  PictureTexture(const std::shared_ptr<MySDLRender> &, const std::string &);
 
   /* with ColorKey */
-  MySDLTexture(const std::shared_ptr<MySDLRender> &, const std::string &,
+  PictureTexture(const std::shared_ptr<MySDLRender> &, const std::string &,
                std::tuple<int, int, int>);
 
-  ~MySDLTexture();
+  ~PictureTexture();
 
-  MySDLTexture(const MySDLTexture &) = delete;
-  MySDLTexture &operator=(const MySDLTexture &) = delete;
+  PictureTexture(const PictureTexture &) = delete;
+  PictureTexture &operator=(const PictureTexture &) = delete;
 
-  MySDLTexture(MySDLTexture &&) noexcept;
-  MySDLTexture &operator=(MySDLTexture &&) noexcept;
+  PictureTexture(PictureTexture &&) noexcept;
+  PictureTexture &operator=(PictureTexture &&) noexcept;
 
   bool available() const;
   SDL_Texture *getTexturePtr() const;

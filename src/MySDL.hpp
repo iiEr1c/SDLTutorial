@@ -1,11 +1,8 @@
 #pragma once
 
-#include "SDL.h"
-
 #include "MySDLEvent.hpp"
 #include "MySDLRender.hpp"
 #include "MySDLSurface.hpp"
-#include "MySDLTexture.hpp"
 #include "MySDLWindow.hpp"
 
 #include <atomic>

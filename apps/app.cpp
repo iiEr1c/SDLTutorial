@@ -1,4 +1,6 @@
 #include "MySDL.hpp"
+#include "PictureTexture.hpp"
+#include "TextureMessenger.hpp"
 
 #include <vector>
 
@@ -20,14 +22,14 @@ int main() {
   });
 
   /* 带额外状态的回调 */
-  auto background =
-      HF::MySDLTexture(sdl->getRendererSharedPtr(),
-                       "/home/eric/code/SDLTutorial/asset/background.png");
+  auto background = HF::TextureMessenger(
+      HF::PictureTexture(sdl->getRendererSharedPtr(),
+                         "/home/eric/code/SDLTutorial/asset/background.png"));
 
   std::tuple<uint8_t, uint8_t, uint8_t> ignoreCyan = {0, 0xff, 0xff};
-  auto SpritesTexture =
-      HF::MySDLTexture(sdl->getRendererSharedPtr(),
-                       "/home/eric/code/SDLTutorial/asset/foo.png", ignoreCyan);
+  auto SpritesTexture = HF::TextureMessenger(HF::PictureTexture(
+      sdl->getRendererSharedPtr(), "/home/eric/code/SDLTutorial/asset/foo.png",
+      ignoreCyan));
 
   constexpr int gapPixel = 64;
   constexpr int heightPixel = 205;

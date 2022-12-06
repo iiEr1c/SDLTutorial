@@ -4,7 +4,10 @@ SET(MYSDL_HEAD
     "MySDLSurface.hpp"
     "MySDLEvent.hpp"
     "MySDLRender.hpp"
-    "MySDLTexture.hpp"
+    "PictureTexture.hpp"
+    "MySDLTTFFont.hpp"
+    "TTFFontTexture.hpp"
+    "TextureMessenger.hpp"
     )
 
 SET(MYSDL_SRC
@@ -13,7 +16,9 @@ SET(MYSDL_SRC
     "MySDLSurface.cpp"
     "MySDLEvent.cpp"
     "MySDLRender.cpp"
-    "MySDLTexture.cpp"
+    "PictureTexture.cpp"
+    "MySDLTTFFont.cpp"
+    "TTFFontTexture.cpp"
     )
 
 add_library(MySDL ${MYSDL_HEAD} ${MYSDL_SRC})
