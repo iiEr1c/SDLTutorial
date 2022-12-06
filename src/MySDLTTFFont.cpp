@@ -27,4 +27,8 @@ MySDLTTFFont &MySDLTTFFont::operator=(MySDLTTFFont &&rhs) noexcept {
   m_font = std::exchange(rhs.m_font, nullptr);
   return *this;
 }
+
+TTF_Font *MySDLTTFFont::getTTFPtr() const { return m_font; }
+
+bool MySDLTTFFont::available() const { return m_font != nullptr; }
 }; // namespace HF

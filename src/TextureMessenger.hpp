@@ -6,11 +6,15 @@
 
 namespace HF {
 // https://github.com/IFeelBloated/Type-System-Zoo/blob/master/existential%20type.cxx
-struct TextureMessenger {
+class TextureMessenger {
+public:
   using QuantificationBound = auto(int, int, SDL_Rect *, double, SDL_Point *,
                                    SDL_RendererFlip) -> void;
+
+private:
   std::move_only_function<QuantificationBound> m_func = {};
 
+public:
   TextureMessenger() = default;
   TextureMessenger(auto x) {
     m_func = [x = std::move(x)](int xPos, int yPos, SDL_Rect *clip,

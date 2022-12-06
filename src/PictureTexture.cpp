@@ -20,7 +20,7 @@ PictureTexture::PictureTexture(const std::shared_ptr<MySDLRender> &render,
     }
     m_texture = SDL_CreateTextureFromSurface(render->getRendererPtr(),
                                              surface.getSurfacePtr());
-    m_weight = surface.getSurfacePtr()->w;
+    m_width = surface.getSurfacePtr()->w;
     m_height = surface.getSurfacePtr()->h;
     if (m_texture == nullptr) [[unlikely]] {
       fmt::print("SDL_CreateTextureFromSurface error: {}\n", SDL_GetError());
@@ -51,7 +51,7 @@ PictureTexture::PictureTexture(const std::shared_ptr<MySDLRender> &render,
 
     m_texture = SDL_CreateTextureFromSurface(render->getRendererPtr(),
                                              surface.getSurfacePtr());
-    m_weight = surface.getSurfacePtr()->w;
+    m_width = surface.getSurfacePtr()->w;
     m_height = surface.getSurfacePtr()->h;
     if (m_texture == nullptr) [[unlikely]] {
       fmt::print("SDL_CreateTextureFromSurface error: {}\n", SDL_GetError());
@@ -68,12 +68,12 @@ PictureTexture::~PictureTexture() {
 PictureTexture::PictureTexture(PictureTexture &&rhs) noexcept
     : m_weak_render{std::move(rhs.m_weak_render)}, m_texture{std::exchange(
                                                        rhs.m_texture, nullptr)},
-      m_weight{rhs.m_weight}, m_height{rhs.m_height} {}
+      m_width{rhs.m_width}, m_height{rhs.m_height} {}
 
 PictureTexture &PictureTexture::operator=(PictureTexture &&rhs) noexcept {
   m_weak_render = std::move(rhs.m_weak_render);
   m_texture = std::exchange(rhs.m_texture, nullptr);
-  m_weight = rhs.m_weight;
+  m_width = rhs.m_width;
   m_height = rhs.m_height;
   return *this;
 }
@@ -88,7 +88,7 @@ void PictureTexture::render(int xPos, int yPos, SDL_Rect *clip /*= nullptr*/,
                           SDL_RendererFlip flip /* = SDL_FLIP_NONE*/) {
   auto render = m_weak_render.lock();
   if (render != nullptr) {
-    SDL_Rect renderQuad{.x = xPos, .y = yPos, .w = m_weight, .h = m_height};
+    SDL_Rect renderQuad{.x = xPos, .y = yPos, .w = m_width, .h = m_height};
     if (clip != nullptr) {
       /*  */
       renderQuad.w = clip->w;

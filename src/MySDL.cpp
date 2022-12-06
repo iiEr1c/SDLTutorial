@@ -9,16 +9,27 @@ MySDL::MySDL(uint32_t initType) { SDL_Init(initType); }
 
 MySDL::~MySDL() { SDL_Quit(); }
 
-void MySDL::CreateWindow(const char *title, int xPos, int yPos, int weight,
+void MySDL::CreateWindow(const char *title, int xPos, int yPos, int width,
                          int height, uint32_t flags) {
-  m_window = MySDLWindow(title, xPos, yPos, weight, height, flags);
+  m_window = MySDLWindow(title, xPos, yPos, width, height, flags);
 }
 
-void MySDL::CreateRenderer() {
+void MySDL::CreateRenderer(uint32_t flag) {
   if (m_window.available()) {
-    m_render = std::make_shared<MySDLRender>(m_window.getWindowPtr());
+    m_render = std::make_shared<MySDLRender>(m_window.getWindowPtr(), flag);
   } else {
     fmt::print("please create window before create render.\n");
+  }
+}
+
+void MySDL::CreateTTFFont(const std::string &path, int color) {
+  if (m_window.available()) {
+    m_ttf = std::make_shared<MySDLTTFFont>(path.c_str(), color);
+    if (!m_ttf->available()) [[unlikely]] {
+      fmt::print("Failed to open ttf font file {}\n", path);
+    }
+  } else {
+    fmt::print("please create window before create ttf font.\n");
   }
 }
 
@@ -60,9 +71,9 @@ void MySDL::DisplayRender() const {
   }
 }
 
-void MySDL::ScaledSurface(int xPos, int yPos, int weight, int height) const {
+void MySDL::ScaledSurface(int xPos, int yPos, int width, int height) const {
   if (m_window.available() && m_surface.available()) {
-    SDL_Rect stretchRect{.x = xPos, .y = yPos, .w = weight, .h = height};
+    SDL_Rect stretchRect{.x = xPos, .y = yPos, .w = width, .h = height};
     SDL_BlitScaled(m_surface.getSurfacePtr(), nullptr,
                    m_window.getWindowSurfacePtr(), std::addressof(stretchRect));
   }
@@ -107,5 +118,9 @@ SDL_Renderer *MySDL::getRendererPtr() const {
 
 std::shared_ptr<MySDLRender> MySDL::getRendererSharedPtr() const {
   return m_render;
+}
+
+std::shared_ptr<MySDLTTFFont> MySDL::getTTFFontSharedPtr() const {
+  return m_ttf;
 }
 }; // namespace HF

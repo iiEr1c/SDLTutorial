@@ -10,7 +10,7 @@ namespace HF {
 class PictureTexture {
   std::weak_ptr<MySDLRender> m_weak_render;
   SDL_Texture *m_texture = nullptr;
-  int m_weight = 0;
+  int m_width = 0;
   int m_height = 0;
 
 public:

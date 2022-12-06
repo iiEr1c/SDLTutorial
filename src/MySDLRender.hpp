@@ -12,7 +12,7 @@ class MySDLRender {
 public:
   MySDLRender();
 
-  MySDLRender(SDL_Window *);
+  MySDLRender(SDL_Window *, uint32_t);
 
   ~MySDLRender();
 
@@ -26,5 +26,11 @@ public:
   bool available() const;
 
   SDL_Renderer *getRendererPtr() const;
+
+  void initRenderColor() const;
+
+  void initPNGLoading() const;
+
+  void initTTF() const;
 };
 } // namespace HF

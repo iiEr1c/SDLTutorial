@@ -1,4 +1,5 @@
 #include "MySDLRender.hpp"
+#include "SDL_ttf.h"
 #include <fmt/core.h>
 
 #include <utility>
@@ -6,17 +7,12 @@
 namespace HF {
 MySDLRender::MySDLRender() {}
 
-MySDLRender::MySDLRender(SDL_Window *window)
-    : m_render{SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED)} {
+MySDLRender::MySDLRender(SDL_Window *window, uint32_t flag)
+    : m_render{SDL_CreateRenderer(window, -1, flag)} {
   if (m_render != nullptr) {
-    constexpr uint8_t initColor = 0xFF;
-    // Initialize renderer color
-    SDL_SetRenderDrawColor(m_render, initColor, initColor, initColor,
-                           initColor);
-    if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) == 0) {
-      fmt::print("render init failed.\n");
-      std::abort();
-    }
+    initRenderColor();
+    initPNGLoading();
+    initTTF();
   }
 }
 
@@ -40,4 +36,26 @@ MySDLRender &MySDLRender::operator=(MySDLRender &&rhs) noexcept {
 }
 
 SDL_Renderer *MySDLRender::getRendererPtr() const { return m_render; }
+
+void MySDLRender::initRenderColor() const {
+  constexpr uint8_t initColor = 0xFF;
+  // Initialize renderer color
+  SDL_SetRenderDrawColor(m_render, initColor, initColor, initColor, initColor);
+}
+
+void MySDLRender::initPNGLoading() const {
+  if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) == 0) {
+    fmt::print("SDL_image could not initialize! SDL_image Error: {}\n",
+               IMG_GetError());
+    std::abort();
+  }
+}
+
+void MySDLRender::initTTF() const {
+  if (TTF_Init() == -1) {
+    fmt::print("SDL_ttf could not initialize! SDL_ttf Error:{}\n",
+               TTF_GetError());
+    std::abort();
+  }
+}
 }; // namespace HF

@@ -20,5 +20,9 @@ public:
 
   MySDLTTFFont(MySDLTTFFont &&) noexcept;
   MySDLTTFFont &operator=(MySDLTTFFont &&) noexcept;
+
+  TTF_Font *getTTFPtr() const;
+
+  bool available() const;
 };
 }; // namespace HF
