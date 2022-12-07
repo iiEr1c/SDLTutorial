@@ -17,10 +17,14 @@ int main() {
   sdl->CreateTTFFont("/home/eric/code/SDLTutorial/asset/lazy.ttf", fontSize);
   sdl->RegisterEvent(SDL_QUIT, [](const std::shared_ptr<HF::MySDL> &mysdl,
                                   const SDL_Event &event) {
-    mysdl->LoadOrChangeMediaSurfaceWithConvert(
-        "/home/eric/code/SDLTutorial/asset/exit.bmp");
-    mysdl->UpdateSurface();
-    mysdl->Display();
+    auto exitTexture = HF::TextureMessenger(
+        HF::PictureTexture(mysdl->getRendererSharedPtr(),
+                           "/home/eric/code/SDLTutorial/asset/exit.png"));
+    constexpr int topLeftX = 0;
+    constexpr int topLeftY = 0;
+    exitTexture.render(topLeftX, topLeftY);
+    SDL_RenderPresent(mysdl->getRendererPtr());
+    mysdl->Delay(500);
     mysdl->StopLoop();
   });
 
