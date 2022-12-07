@@ -6,7 +6,7 @@ learn SDL
 ```
 # 仅在Ubuntu 22.04环境测试通过
 sudo apt -y upgrade # upgrade systemd
-sudo apt -y install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+sudo apt -y install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
 sudo snap install cmake --classic
 ```
 

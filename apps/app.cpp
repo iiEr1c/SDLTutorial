@@ -29,62 +29,16 @@ int main() {
     mysdl->StopLoop();
   });
 
-  /* 带额外状态的回调 */
-  auto background = HF::TextureMessenger(
-      HF::PictureTexture(sdl->getRendererSharedPtr(),
-                         "/home/eric/code/SDLTutorial/asset/background.png"));
-  background.render(0, 0);
-
-  std::tuple<uint8_t, uint8_t, uint8_t> ignoreCyan = {0, 0xff, 0xff};
-  auto SpritesTexture = HF::TextureMessenger(HF::PictureTexture(
-      sdl->getRendererSharedPtr(), "/home/eric/code/SDLTutorial/asset/foo.png",
-      ignoreCyan));
-
-  SDL_Color textColor = {0, 0, 0};
-  auto textTexture = HF::TextureMessenger(HF::TTFFontTexture(
-      sdl->getRendererSharedPtr(), sdl->getTTFFontSharedPtr(), "Hello World!",
-      textColor));
-
-  constexpr int gapPixel = 64;
-  constexpr int heightPixel = 205;
-  std::vector<SDL_Rect> frame = {{0, 0, gapPixel, heightPixel},
-                                 {gapPixel, 0, gapPixel, heightPixel},
-                                 {gapPixel * 2, 0, gapPixel, heightPixel},
-                                 {gapPixel * 3, 0, gapPixel, heightPixel}};
-  int animationIndex = 0;
-  sdl->RegisterEvent(
-      SDL_KEYDOWN,
-      [background = std::move(background),
-       SpritesTexture = std::move(SpritesTexture),
-       textTexture = std::move(textTexture), frame = std::move(frame),
-       animationIndex = animationIndex](const std::shared_ptr<HF::MySDL> &mysdl,
-                                        const SDL_Event &event) mutable {
-        animationIndex++;
-        animationIndex %= 4;
-        constexpr int topLeftX = 0;
-        constexpr int topLeftY = 0;
-        auto key = event.key.keysym.sym;
-        if (key == SDLK_UP) {
-          SDL_RenderClear(mysdl->getRendererPtr());
-          background.render(topLeftX, topLeftY);
-          SpritesTexture.render(width / 2, 0, frame.data() + animationIndex);
-        } else if (key == SDLK_DOWN) {
-          SDL_RenderClear(mysdl->getRendererPtr());
-          background.render(topLeftX, topLeftY);
-          SpritesTexture.render(width / 2, height / 2,
-                                frame.data() + animationIndex);
-        } else if (key == SDLK_LEFT) {
-          SDL_RenderClear(mysdl->getRendererPtr());
-          background.render(topLeftX, topLeftY);
-          textTexture.render(320, 240);
-        } else if (key == SDLK_RIGHT) {
-
-        } else {
-          background.render(topLeftX, topLeftY);
-        }
-
-        SDL_RenderPresent(mysdl->getRendererPtr());
-      });
+  /* use SDL_GetKeyboardState */
+  std::move_only_function<void()> combineKeyboardCallback = []() {
+    const uint8_t *currentKeyStates = SDL_GetKeyboardState(nullptr);
+    /* check ctrl + C */
+    if (currentKeyStates[SDL_SCANCODE_LCTRL] &&
+        currentKeyStates[SDL_SCANCODE_C]) {
+      fmt::print("ctrl + C combine\n");
+    }
+  };
+  sdl->addPeerLoopTask(std::move(combineKeyboardCallback));
 
   auto wifiButton =
       HF::Button(sdl->getRendererSharedPtr(),
@@ -93,9 +47,9 @@ int main() {
   SDL_RenderPresent(sdl->getRendererPtr());
   /* mouse event */
   sdl->RegisterEvent(
-      SDL_MOUSEBUTTONDOWN,
-      [wifiButton = std::move(wifiButton)](
-          const std::shared_ptr<HF::MySDL> &mysdl, const SDL_Event &event) mutable {
+      SDL_MOUSEBUTTONDOWN, [wifiButton = std::move(wifiButton)](
+                               const std::shared_ptr<HF::MySDL> &mysdl,
+                               const SDL_Event &event) mutable {
         wifiButton.render();
         int curPosX = 0, curPosY = 0;
         SDL_GetMouseState(&curPosX, &curPosY);

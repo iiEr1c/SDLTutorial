@@ -22,6 +22,8 @@ class MySDL : public std::enable_shared_from_this<MySDL> {
   // std::unordered_map<uint32_t, MySDLEvent> m_events;
   std::unordered_map<uint32_t, std::vector<MySDLEvent>> m_events;
 
+  std::vector<std::move_only_function<void()>> m_task_peerloop;
+
   std::atomic_flag quit = false;
 
 public:
@@ -72,5 +74,7 @@ public:
   std::shared_ptr<MySDLRender> getRendererSharedPtr() const;
 
   std::shared_ptr<MySDLTTFFont> getTTFFontSharedPtr() const;
+
+  void addPeerLoopTask(std::move_only_function<void()>);
 };
 }; // namespace HF

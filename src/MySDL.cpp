@@ -96,6 +96,10 @@ void MySDL::LoopAndWaitEvent() {
       }
     }
 
+    /* execute PeerLoop's task */
+    for (auto &func : m_task_peerloop) {
+      func();
+    }
     // SDL_RenderPresent(m_render->getRendererPtr());
   }
 }
@@ -145,5 +149,9 @@ std::shared_ptr<MySDLRender> MySDL::getRendererSharedPtr() const {
 
 std::shared_ptr<MySDLTTFFont> MySDL::getTTFFontSharedPtr() const {
   return m_ttf;
+}
+
+void MySDL::addPeerLoopTask(std::move_only_function<void()> task) {
+  m_task_peerloop.emplace_back(std::move(task));
 }
 }; // namespace HF

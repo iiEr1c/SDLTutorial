@@ -193,3 +193,17 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 该章节其实介绍的是button的检测. button类应定义: 位置(矩形的话左上角到右下角)、贴图、对应的事件.
 
 在渲染时, 不同的texture有先后顺序, 是否应该定义一个类似有向图的东西, 每次按照顺序render.
+
+# LESSON 18 [Key States]
+
+~~todo:~~ 处理Key combination, 无论是用之前的事件处理或者这里的Key States写法. => SDL_TextInputEvent(应该是这个). 这里设计上直接定义一个回调赛入loop循环中, 然后每次loop都扫描一次, 这样子做的问题是每次loop都会执行一次, 所以这是有问题的.
+
+能否这么处理:
+
++ 每次将任务取出来, 执行一次, 然后塞回去? => 但是下一次loop仍然有问题.
++ 应该得加一个类似延时的功能?
+
+## reference
++ [stackoverflow answer SDL_GetKeyboardState](https://stackoverflow.com/questions/1252976/how-to-handle-multiple-keypresses-at-once-with-sdl)
+
+# LESSON 21 [Sound Effects and Music]
