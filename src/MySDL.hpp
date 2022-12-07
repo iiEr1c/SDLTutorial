@@ -10,6 +10,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace HF {
 class MySDL : public std::enable_shared_from_this<MySDL> {
@@ -18,7 +19,8 @@ class MySDL : public std::enable_shared_from_this<MySDL> {
   std::shared_ptr<MySDLRender> m_render;
   std::shared_ptr<MySDLTTFFont> m_ttf;
 
-  std::unordered_map<uint32_t, MySDLEvent> m_events;
+  // std::unordered_map<uint32_t, MySDLEvent> m_events;
+  std::unordered_map<uint32_t, std::vector<MySDLEvent>> m_events;
 
   std::atomic_flag quit = false;
 
@@ -58,9 +60,12 @@ public:
 
   void Display() const;
 
-  void RegisterEvent(uint32_t, MySDLEvent::MySDLEventCallbackType);
+  size_t RegisterEvent(uint32_t, MySDLEvent::MySDLEventCallbackType);
 
   void UnRegisterEvent(uint32_t);
+
+  /* 对应事件的第index下标的闭包 */
+  void UnRegisterEvent(uint32_t, size_t);
 
   SDL_Renderer *getRendererPtr() const;
 

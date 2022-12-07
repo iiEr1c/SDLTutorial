@@ -89,7 +89,10 @@ void MySDL::LoopAndWaitEvent() {
     while (SDL_PollEvent(&event) != 0) {
       /* handle event */
       if (auto iter = m_events.find(event.type); iter != m_events.end()) {
-        iter->second(event);
+        size_t closureObjSize = iter->second.size();
+        for (size_t i = 0; i < closureObjSize; ++i) {
+          iter->second[i](event);
+        }
       }
     }
 
@@ -102,14 +105,34 @@ void MySDL::StopLoop() {
   quit.notify_all();
 }
 
-void MySDL::RegisterEvent(uint32_t sdlEventType,
-                          MySDLEvent::MySDLEventCallbackType callback) {
+size_t MySDL::RegisterEvent(uint32_t sdlEventType,
+                            MySDLEvent::MySDLEventCallbackType callback) {
   MySDLEvent event{shared_from_this(), std::move(callback)};
-  m_events.insert_or_assign(sdlEventType, std::move(event));
+  auto iter = m_events.find(sdlEventType);
+  if (iter != m_events.end()) {
+    iter->second.emplace_back(std::move(event));
+    return iter->second.size() - 1;
+  } else {
+    std::vector<MySDLEvent> firstObject;
+    firstObject.emplace_back(std::move(event));
+    m_events.insert({sdlEventType, std::move(firstObject)});
+    return 0;
+  }
 }
 
+/* 不再关注该事件 */
 void MySDL::UnRegisterEvent(uint32_t sdlEventType) {
   m_events.erase(sdlEventType);
+}
+
+void MySDL::UnRegisterEvent(uint32_t sdlEventType, size_t index) {
+  auto iter = m_events.find(sdlEventType);
+  if (iter != m_events.end()) {
+    size_t size = iter->second.size();
+    if (index < size) {
+      iter->second.erase(iter->second.begin() + index);
+    }
+  }
 }
 
 SDL_Renderer *MySDL::getRendererPtr() const {

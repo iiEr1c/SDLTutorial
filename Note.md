@@ -168,3 +168,28 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 ## reference
 + [TrueType](https://en.wikipedia.org/wiki/TrueType)
 + [ubuntu SDLttf cmakelists](https://stackoverflow.com/questions/58107854/cmake-is-unable-to-find-sdl2-ttf-im-trying-to-link-it-the-same-way-i-would-wit)
+
+# LESSON 17 [mouse event]
+
+在最初的设计时, 对于事件处理的抽象是naive的, 具体的做法是: 具体的事件类型 -> 处理对应的回调. 这样的抽象方式有个问题, 就是如果不同的对象, 在相同的事件类型时, 需要有不同的回调, 从接口上, 则需要变成: 事件: 对象类型 -> 回调, 而非之前的那种包装方式: 事件类型 -> 一个将具体对象塞进function中的闭包(如果有n多个对象都需要这么做应该怎么办?). 那么应该如何处理呢? 变成这样的接口```std::unordered_map<uint32_t, std::vector<MySDLEvent>>```? 然后每当需要处理的事件时, 去遍历std::list中的所有闭包, 然后执行一遍. 然后在逻辑上则需要每个对象内部能够分辨该事件是来自本对象的触发. 比如我们定义了n个button, 那么当鼠标事件发生时, 根据鼠标的位置判断这个事件是否是作用在自己这个button上, 如果不是则跳过. 这样做的事件复杂度是O(n). 有没有更好的方案呢?
+
+重新思考这个问题: 对于SDL来说, 它监听的是键盘/鼠标等事件, 官方的api接口是否存在类似的派发机制呢? 如果没有, 那么我们也许可以模仿epoll的做法, 如果SDL Event可以传入一个ptr, 那么我们在外部添加一个O(1)或者O(log(n))的容器记录ptr, 然后当事件发生时, 我们能够快速的找到对应的事件所需要执行的回调, 这一切的前提在于SDL Event是否可以传入一个ptr作为后续的判断, 但是目前没有找到类似的资料.
+
+**todo: 尝试解决这个问题.**
+
+现在暂时将接口修改为```std::unordered_map<uint32_t, std::vector<MySDLEvent>>```, 然后为为每一个对象都创一个闭包.
+
+这里还得提供接口: 如何将具体对象从事件链表中剔除出去, 也许这里可以使用observer? 因为vector的有序性, 其实可以返回vector中的下标给用户, 如果需要解注册那么用这个下标即可. 这么一想是不是应该使用vector了, 毕竟动态性不是那么友好. 而是使用std::list, 将迭代器返回给用户, 因为迭代器也不会失效. 考虑到每次事件触发都要遍历, 先使用std::vector吧, 毕竟cache友好.
+
+鼠标检测时, API ```SDL_GetMouseState```对于鼠标位置是基于对应window的相对位置(即相对于窗口左上角(0, 0)的相对位置).
+
+鼠标事件包括:
+
++ SDL_MOUSEMOTION: 鼠标移动
++ SDL_MOUSEBUTTONDOWN: Mouse button pressed
++ SDL_MOUSEBUTTONUP: Mouse button released
++ SDL_MOUSEWHEEL: 滚轮事件
+
+该章节其实介绍的是button的检测. button类应定义: 位置(矩形的话左上角到右下角)、贴图、对应的事件.
+
+在渲染时, 不同的texture有先后顺序, 是否应该定义一个类似有向图的东西, 每次按照顺序render.

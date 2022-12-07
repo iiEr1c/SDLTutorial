@@ -1,3 +1,4 @@
+#include "Button.hpp"
 #include "MySDL.hpp"
 #include "PictureTexture.hpp"
 #include "SDL.h"
@@ -32,6 +33,7 @@ int main() {
   auto background = HF::TextureMessenger(
       HF::PictureTexture(sdl->getRendererSharedPtr(),
                          "/home/eric/code/SDLTutorial/asset/background.png"));
+  background.render(0, 0);
 
   std::tuple<uint8_t, uint8_t, uint8_t> ignoreCyan = {0, 0xff, 0xff};
   auto SpritesTexture = HF::TextureMessenger(HF::PictureTexture(
@@ -82,6 +84,28 @@ int main() {
         }
 
         SDL_RenderPresent(mysdl->getRendererPtr());
+      });
+
+  auto wifiButton =
+      HF::Button(sdl->getRendererSharedPtr(),
+                 "/home/eric/code/SDLTutorial/asset/wifiButton.png", 100, 100);
+  wifiButton.render();
+  SDL_RenderPresent(sdl->getRendererPtr());
+  /* mouse event */
+  sdl->RegisterEvent(
+      SDL_MOUSEBUTTONDOWN,
+      [wifiButton = std::move(wifiButton)](
+          const std::shared_ptr<HF::MySDL> &mysdl, const SDL_Event &event) mutable {
+        wifiButton.render();
+        int curPosX = 0, curPosY = 0;
+        SDL_GetMouseState(&curPosX, &curPosY);
+        auto [posX, posY] = wifiButton.getPosition();
+        auto [imgWidth, imgHeight] = wifiButton.getButtonImgAttr();
+        if (curPosX >= posX && curPosX <= posX + imgWidth && curPosY >= posY &&
+            curPosY <= posY + imgHeight) {
+          fmt::print("curPos:[{}, {}], buttonPos[{},{}], imgAttr[{},{}]\n",
+                     curPosX, curPosY, posX, posY, imgWidth, imgHeight);
+        }
       });
 
   sdl->LoopAndWaitEvent();

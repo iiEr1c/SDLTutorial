@@ -10,7 +10,7 @@ PictureTexture::PictureTexture(const std::shared_ptr<MySDLRender> &render)
     : m_weak_render{render} {}
 
 PictureTexture::PictureTexture(const std::shared_ptr<MySDLRender> &render,
-                           const std::string &path)
+                               const std::string &path)
     : m_weak_render{render} {
   if (render->available()) [[likely]] {
     auto surface = MySDLSurface(path);
@@ -30,8 +30,8 @@ PictureTexture::PictureTexture(const std::shared_ptr<MySDLRender> &render,
 
 /* with ColorKey */
 PictureTexture::PictureTexture(const std::shared_ptr<MySDLRender> &render,
-                           const std::string &path,
-                           std::tuple<int, int, int> color)
+                               const std::string &path,
+                               std::tuple<int, int, int> color)
     : m_weak_render{render} {
   if (render->available()) [[likely]] {
     auto surface = MySDLSurface(path);
@@ -83,9 +83,9 @@ bool PictureTexture::available() const { return m_texture != nullptr; }
 SDL_Texture *PictureTexture::getTexturePtr() const { return m_texture; }
 
 void PictureTexture::render(int xPos, int yPos, SDL_Rect *clip /*= nullptr*/,
-                          double angle /* = 0.0*/,
-                          SDL_Point *center /*= nullptr*/,
-                          SDL_RendererFlip flip /* = SDL_FLIP_NONE*/) {
+                            double angle /* = 0.0*/,
+                            SDL_Point *center /*= nullptr*/,
+                            SDL_RendererFlip flip /* = SDL_FLIP_NONE*/) {
   auto render = m_weak_render.lock();
   if (render != nullptr) {
     SDL_Rect renderQuad{.x = xPos, .y = yPos, .w = m_width, .h = m_height};
@@ -110,5 +110,9 @@ void PictureTexture::setAlpha(uint8_t alpha) {
   if (m_texture != nullptr) {
     SDL_SetTextureAlphaMod(m_texture, alpha);
   }
+}
+
+std::pair<int, int> PictureTexture::getImageAttr() const {
+  return {m_width, m_height};
 }
 }; // namespace HF

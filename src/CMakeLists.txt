@@ -8,6 +8,7 @@ SET(MYSDL_HEAD
     "MySDLTTFFont.hpp"
     "TTFFontTexture.hpp"
     "TextureMessenger.hpp"
+    "Button.hpp"
     )
 
 SET(MYSDL_SRC
@@ -19,6 +20,7 @@ SET(MYSDL_SRC
     "PictureTexture.cpp"
     "MySDLTTFFont.cpp"
     "TTFFontTexture.cpp"
+    "Button.cpp"
     )
 
 add_library(MySDL ${MYSDL_HEAD} ${MYSDL_SRC})

@@ -22,7 +22,7 @@ public:
 
   /* with ColorKey */
   PictureTexture(const std::shared_ptr<MySDLRender> &, const std::string &,
-               std::tuple<int, int, int>);
+                 std::tuple<int, int, int>);
 
   ~PictureTexture();
 
@@ -45,5 +45,7 @@ public:
 
   /* 透明 */
   void setAlpha(uint8_t);
+
+  std::pair<int, int> getImageAttr() const;
 };
 }; // namespace HF
