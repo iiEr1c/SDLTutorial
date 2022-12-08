@@ -92,15 +92,13 @@ int main() {
           scratchChunk.play();
         } else if (key == SDLK_9) {
           // if there is no music playing
-          fmt::print("Mix_PlayingMusic = {}\n", Mix_PlayingMusic());
           if (Mix_PlayingMusic() == 0) {
-            music.play(50);
+            music.play();
           } else {
             // pause music
             if (Mix_PausedMusic() == 1) {
               Mix_ResumeMusic();
             } else {
-              fmt::print("Mix_PausedMusic() = {}\n", Mix_PausedMusic());
               Mix_PauseMusic();
             }
           }
