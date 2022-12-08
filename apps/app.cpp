@@ -107,6 +107,19 @@ int main() {
         }
       });
 
+  sdl->RegisterEvent(SDL_KEYDOWN, [](const std::shared_ptr<HF::MySDL> &mysdl,
+                                     const SDL_Event &event) mutable {
+    if (event.key.keysym.sym == SDLK_RETURN) {
+      std::string nowStr = std::to_string(SDL_GetTicks());
+      auto timeTexture = HF::TTFFontTexture(mysdl->getRendererSharedPtr(),
+                                            mysdl->getTTFFontSharedPtr(),
+                                            nowStr, {0, 0, 0, 255});
+      SDL_RenderClear(mysdl->getRendererPtr());
+      timeTexture.render(0, 0);
+      SDL_RenderPresent(mysdl->getRendererPtr());
+    }
+  });
+
   sdl->LoopAndWaitEvent();
   return 0;
 }

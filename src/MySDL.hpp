@@ -24,6 +24,8 @@ class MySDL : public std::enable_shared_from_this<MySDL> {
 
   std::vector<std::move_only_function<void()>> m_task_peerloop;
 
+  std::vector<std::move_only_function<void()>> m_once_task;
+
   std::atomic_flag quit = false;
 
   void initAudio();

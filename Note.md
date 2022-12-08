@@ -220,5 +220,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 这里其实有一大堆的ifelse的问题, 应该考虑类似ioc的容器来处理, 即在其他地方注册 对应的按键->播放对应的音乐. 这里的带啊吗不方便维护, 其实可以类似之前的事件处理的方式, 增加一个register接口即可.
 
-# reference
+## reference
 + [Mix_PauseMusic api](https://wiki.libsdl.org/SDL_mixer/Mix_PauseMusic)
+
+# LESSON 22 [Timer]
+
+这一节其实就是```SDL_GetTicks```接口.
+从之前的LESSON到现在的LESSON, 是否应该将texture组织成有向无环图, 然后每一次loop时渲染.
