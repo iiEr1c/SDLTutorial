@@ -18,7 +18,6 @@ MySDLRender::MySDLRender(SDL_Window *window, uint32_t flag)
 
 MySDLRender::~MySDLRender() {
   if (m_render != nullptr) {
-    IMG_Quit();
     SDL_DestroyRenderer(m_render);
   }
 }

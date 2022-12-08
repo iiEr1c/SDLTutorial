@@ -48,6 +48,9 @@ TTFFontTexture::TTFFontTexture(TTFFontTexture &&rhs) noexcept
       m_height(rhs.m_height) {}
 
 TTFFontTexture &TTFFontTexture::operator=(TTFFontTexture &&rhs) noexcept {
+  if (m_texture != nullptr) {
+    SDL_DestroyTexture(m_texture);
+  }
   m_weak_render = std::move(rhs.m_weak_render);
   m_weak_ttffont = std::move(rhs.m_weak_ttffont);
   m_text = std::move(rhs.m_text);

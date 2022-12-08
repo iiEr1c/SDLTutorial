@@ -26,6 +26,8 @@ class MySDL : public std::enable_shared_from_this<MySDL> {
 
   std::atomic_flag quit = false;
 
+  void initAudio();
+
 public:
   MySDL(uint32_t initType = SDL_INIT_VIDEO);
   ~MySDL();

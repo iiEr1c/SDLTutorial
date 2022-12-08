@@ -24,6 +24,9 @@ MySDLTTFFont::MySDLTTFFont(MySDLTTFFont &&rhs) noexcept
     : m_font(std::exchange(rhs.m_font, nullptr)) {}
 
 MySDLTTFFont &MySDLTTFFont::operator=(MySDLTTFFont &&rhs) noexcept {
+  if (m_font != nullptr) {
+    TTF_CloseFont(m_font);
+  }
   m_font = std::exchange(rhs.m_font, nullptr);
   return *this;
 }

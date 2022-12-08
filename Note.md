@@ -207,3 +207,15 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 + [stackoverflow answer SDL_GetKeyboardState](https://stackoverflow.com/questions/1252976/how-to-handle-multiple-keypresses-at-once-with-sdl)
 
 # LESSON 21 [Sound Effects and Music]
+
+环境配置, 和SDL_Image类似. 具体配置更新在README.md中.
+
+在输出声音时, 需要解决多种声音一起输出的问 => 
+
+```
+原因：主要是Mix_Music、Mix_LoadMUS()和Mix_Chunk、Mix_LoadWAV()的问题、播放一种声音用Mix_LoadMUS()即可，但是两种声音时可能会导致通道channel混乱问题导致声音混乱；
+
+解决：将背景音乐用Mix_LoadMUS()加载和用Mix_PlayMusic播放；  其他动态声音用Mix_LoadWAV()加载和用Mix_PlayChannel播放，分开就好。
+```
+
+这里其实有一大堆的ifelse的问题, 应该考虑类似ioc的容器来处理, 即在其他地方注册 对应的按键->播放对应的音乐. 这里的带啊吗不方便维护, 其实可以类似之前的事件处理的方式, 增加一个register接口即可.

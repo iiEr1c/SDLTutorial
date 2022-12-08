@@ -71,6 +71,9 @@ PictureTexture::PictureTexture(PictureTexture &&rhs) noexcept
       m_width{rhs.m_width}, m_height{rhs.m_height} {}
 
 PictureTexture &PictureTexture::operator=(PictureTexture &&rhs) noexcept {
+  if (m_texture != nullptr) {
+    SDL_DestroyTexture(m_texture);
+  }
   m_weak_render = std::move(rhs.m_weak_render);
   m_texture = std::exchange(rhs.m_texture, nullptr);
   m_width = rhs.m_width;

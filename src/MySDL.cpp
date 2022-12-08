@@ -1,13 +1,29 @@
 #include "SDL.h"
+#include "SDL_mixer.h"
 #include <fmt/core.h>
 #include <fmt/format.h>
 
 #include "MySDL.hpp"
 
 namespace HF {
-MySDL::MySDL(uint32_t initType) { SDL_Init(initType); }
+void MySDL::initAudio() {
+  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+    fmt::print("Failed to Open Audio.\n");
+  }
+}
 
-MySDL::~MySDL() { SDL_Quit(); }
+MySDL::MySDL(uint32_t initType) {
+  SDL_Init(initType);
+  if ((initType & SDL_INIT_AUDIO) == SDL_INIT_AUDIO) {
+    initAudio();
+  }
+}
+
+MySDL::~MySDL() {
+  Mix_Quit();
+  IMG_Quit();
+  SDL_Quit();
+}
 
 void MySDL::CreateWindow(const char *title, int xPos, int yPos, int width,
                          int height, uint32_t flags) {
