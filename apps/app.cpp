@@ -16,7 +16,8 @@ int main() {
   auto sdl = std::make_shared<HF::MySDL>(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
   sdl->CreateWindow("demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                     width, height, SDL_WINDOW_SHOWN);
-  sdl->CreateRenderer(SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  sdl->CreateRenderer(
+      SDL_RENDERER_ACCELERATED /* | SDL_RENDERER_PRESENTVSYNC*/);
   constexpr int fontSize = 28;
   sdl->CreateTTFFont("/home/eric/code/SDLTutorial/asset/lazy.ttf", fontSize);
   sdl->RegisterEvent(SDL_QUIT, [](const std::shared_ptr<HF::MySDL> &mysdl,
@@ -47,20 +48,24 @@ int main() {
   int countedFrames = 0;
   HF::FakerTimer fpsTimer;
   fpsTimer.start();
+  std::weak_ptr<HF::MySDL> mysdl = sdl;
   std::move_only_function<void()> calculateFps =
-      [mysdl = sdl, countedFrames = std::move(countedFrames),
+      [mysdl = std::move(mysdl), countedFrames = std::move(countedFrames),
        fpsTimer = std::move(fpsTimer)]() mutable {
         float avgFps = countedFrames / (fpsTimer.getTicks() / 1000.f);
         if (avgFps > 2000000) {
           avgFps = 0;
         }
-        std::string nowStr = fmt::format("{}", avgFps);
-        auto timeTexture = HF::TTFFontTexture(mysdl->getRendererSharedPtr(),
-                                              mysdl->getTTFFontSharedPtr(),
-                                              nowStr, {0, 0, 0, 255});
-        SDL_RenderClear(mysdl->getRendererPtr());
-        timeTexture.render(0, 0);
-        SDL_RenderPresent(mysdl->getRendererPtr());
+        auto renderPtr = mysdl.lock();
+        if (renderPtr != nullptr) [[likely]] {
+          std::string nowStr = fmt::format("{}", avgFps);
+          auto timeTexture = HF::TTFFontTexture(
+              renderPtr->getRendererSharedPtr(),
+              renderPtr->getTTFFontSharedPtr(), nowStr, {0, 0, 0, 255});
+          SDL_RenderClear(renderPtr->getRendererPtr());
+          timeTexture.render(0, 0);
+          SDL_RenderPresent(renderPtr->getRendererPtr());
+        }
         ++countedFrames;
       };
   sdl->addPeerLoopTask(std::move(calculateFps));
