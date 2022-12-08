@@ -11,6 +11,7 @@ SET(MYSDL_HEAD
     "Button.hpp"
     "MySDLMixer.hpp"
     "MySDLMusic.hpp"
+    "FakerTimer.hpp"
     )
 
 SET(MYSDL_SRC
@@ -25,6 +26,7 @@ SET(MYSDL_SRC
     "Button.cpp"
     "MySDLMixer.cpp"
     "MySDLMusic.cpp"
+    "FakerTimer.cpp"
     )
 
 add_library(MySDL ${MYSDL_HEAD} ${MYSDL_SRC})

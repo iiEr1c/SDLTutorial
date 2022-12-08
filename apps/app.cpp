@@ -1,4 +1,5 @@
 #include "Button.hpp"
+#include "FakerTimer.hpp"
 #include "MySDL.hpp"
 #include "MySDLMixer.hpp"
 #include "MySDLMusic.hpp"
@@ -107,17 +108,31 @@ int main() {
         }
       });
 
-  sdl->RegisterEvent(SDL_KEYDOWN, [](const std::shared_ptr<HF::MySDL> &mysdl,
-                                     const SDL_Event &event) mutable {
-    if (event.key.keysym.sym == SDLK_RETURN) {
-      std::string nowStr = std::to_string(SDL_GetTicks());
-      auto timeTexture = HF::TTFFontTexture(mysdl->getRendererSharedPtr(),
-                                            mysdl->getTTFFontSharedPtr(),
-                                            nowStr, {0, 0, 0, 255});
-      SDL_RenderClear(mysdl->getRendererPtr());
-      timeTexture.render(0, 0);
-      SDL_RenderPresent(mysdl->getRendererPtr());
+  HF::FakerTimer timer;
+  sdl->RegisterEvent(SDL_KEYDOWN, [timer = std::move(timer)](
+                                      const std::shared_ptr<HF::MySDL> &mysdl,
+                                      const SDL_Event &event) mutable {
+    if (event.key.keysym.sym == SDLK_s) {
+      if (timer.isStarted()) {
+        timer.stop();
+      } else {
+        timer.start();
+      }
+    } else if (event.key.keysym.sym == SDLK_p) {
+      if (timer.isPaused()) {
+        timer.unpause();
+      } else {
+        timer.pause();
+      }
     }
+
+    std::string nowStr = fmt::format("{}s", timer.getTicks() / 1000.f);
+    auto timeTexture = HF::TTFFontTexture(mysdl->getRendererSharedPtr(),
+                                          mysdl->getTTFFontSharedPtr(), nowStr,
+                                          {0, 0, 0, 255});
+    SDL_RenderClear(mysdl->getRendererPtr());
+    timeTexture.render(0, 0);
+    SDL_RenderPresent(mysdl->getRendererPtr());
   });
 
   sdl->LoopAndWaitEvent();

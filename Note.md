@@ -227,3 +227,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 这一节其实就是```SDL_GetTicks```接口.
 从之前的LESSON到现在的LESSON, 是否应该将texture组织成有向无环图, 然后每一次loop时渲染.
+
+# LESSON 23 [Advanced Timers]
+这一章节设计了定时器, 见FakerTimer.
