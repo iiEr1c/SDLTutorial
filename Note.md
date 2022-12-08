@@ -229,4 +229,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 从之前的LESSON到现在的LESSON, 是否应该将texture组织成有向无环图, 然后每一次loop时渲染.
 
 # LESSON 23 [Advanced Timers]
-这一章节设计了定时器, 见FakerTimer.
+这一章节设计了定时器, 见```FakerTimer```.
+
+# LESSON 24 [Calculating Frame Rate]
+利用见```FakerTimer```计算帧率.

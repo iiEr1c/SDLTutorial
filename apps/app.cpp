@@ -43,6 +43,28 @@ int main() {
   };
   sdl->addPeerLoopTask(std::move(combineKeyboardCallback));
 
+  /* calculate fps frame */
+  int countedFrames = 0;
+  HF::FakerTimer fpsTimer;
+  fpsTimer.start();
+  std::move_only_function<void()> calculateFps =
+      [mysdl = sdl, countedFrames = std::move(countedFrames),
+       fpsTimer = std::move(fpsTimer)]() mutable {
+        float avgFps = countedFrames / (fpsTimer.getTicks() / 1000.f);
+        if (avgFps > 2000000) {
+          avgFps = 0;
+        }
+        std::string nowStr = fmt::format("{}", avgFps);
+        auto timeTexture = HF::TTFFontTexture(mysdl->getRendererSharedPtr(),
+                                              mysdl->getTTFFontSharedPtr(),
+                                              nowStr, {0, 0, 0, 255});
+        SDL_RenderClear(mysdl->getRendererPtr());
+        timeTexture.render(0, 0);
+        SDL_RenderPresent(mysdl->getRendererPtr());
+        ++countedFrames;
+      };
+  sdl->addPeerLoopTask(std::move(calculateFps));
+
   auto wifiButton =
       HF::Button(sdl->getRendererSharedPtr(),
                  "/home/eric/code/SDLTutorial/asset/wifiButton.png", 100, 100);
