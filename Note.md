@@ -246,3 +246,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 这里写的很差, 应该重构为: mysdl中保存一个等待渲染的列表, 每次loop时清空, 然后依次将需要渲染的对象全部渲染出来.
 另外, 这里的键盘输入控制的不好, 需要额外的资料.
+
+要判断是否是长按下, 检查```event.key.repeat```是否为1即可.
