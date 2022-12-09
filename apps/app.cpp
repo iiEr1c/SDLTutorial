@@ -1,4 +1,5 @@
 #include "Button.hpp"
+#include "Dot.hpp"
 #include "FakerTimer.hpp"
 #include "MySDL.hpp"
 #include "MySDLMixer.hpp"
@@ -16,8 +17,7 @@ int main() {
   auto sdl = std::make_shared<HF::MySDL>(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
   sdl->CreateWindow("demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                     width, height, SDL_WINDOW_SHOWN);
-  sdl->CreateRenderer(
-      SDL_RENDERER_ACCELERATED /* | SDL_RENDERER_PRESENTVSYNC*/);
+  sdl->CreateRenderer(SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   constexpr int fontSize = 28;
   sdl->CreateTTFFont("/home/eric/code/SDLTutorial/asset/lazy.ttf", fontSize);
   sdl->RegisterEvent(SDL_QUIT, [](const std::shared_ptr<HF::MySDL> &mysdl,
@@ -45,6 +45,7 @@ int main() {
   sdl->addPeerLoopTask(std::move(combineKeyboardCallback));
 
   /* calculate fps frame */
+  /*
   int countedFrames = 0;
   HF::FakerTimer fpsTimer;
   fpsTimer.start();
@@ -69,6 +70,7 @@ int main() {
         ++countedFrames;
       };
   sdl->addPeerLoopTask(std::move(calculateFps));
+  */
 
   auto wifiButton =
       HF::Button(sdl->getRendererSharedPtr(),
@@ -135,6 +137,7 @@ int main() {
         }
       });
 
+  /*
   HF::FakerTimer timer;
   sdl->RegisterEvent(SDL_KEYDOWN, [timer = std::move(timer)](
                                       const std::shared_ptr<HF::MySDL> &mysdl,
@@ -161,6 +164,40 @@ int main() {
     timeTexture.render(0, 0);
     SDL_RenderPresent(mysdl->getRendererPtr());
   });
+  */
+  auto dot = std::make_shared<Dot>(sdl->getRendererSharedPtr(),
+                                   "/home/eric/code/SDLTutorial/asset/dot.bmp");
+  sdl->RegisterEvent(SDL_KEYDOWN,
+                     [dot = dot](const std::shared_ptr<HF::MySDL> &mysdl,
+                                 const SDL_Event &event) mutable {
+                       if (event.key.repeat == 0) {
+                         switch (event.key.keysym.sym) {
+                         case SDLK_UP:
+                           dot->up();
+                           break;
+                         case SDLK_DOWN:
+                           dot->down();
+                           break;
+                         case SDLK_LEFT:
+                           dot->left();
+                           break;
+                         case SDLK_RIGHT:
+                           dot->right();
+                           break;
+                         }
+                       }
+                     });
+  std::weak_ptr<HF::MySDL> weak_mysdl = sdl;
+  sdl->addPeerLoopTask(
+      [dot = std::move(dot), weak_mysdl = std::move(weak_mysdl)]() {
+        auto mysdl = weak_mysdl.lock();
+        if (mysdl != nullptr) {
+          SDL_RenderClear(mysdl->getRendererPtr());
+          dot->move();
+          dot->render();
+          SDL_RenderPresent(mysdl->getRendererPtr());
+        }
+      });
 
   sdl->LoopAndWaitEvent();
   return 0;

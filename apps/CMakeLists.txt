@@ -1,4 +1,12 @@
-add_executable(app app.cpp)
+SET(APP_HEADER
+    "Dot.hpp"
+    )
+
+SET(APP_SRCS
+    "Dot.cpp"
+    )
+
+add_executable(app app.cpp ${APP_HEADER} ${APP_SRCS})
 
 target_compile_features(app PRIVATE cxx_std_20)
 
