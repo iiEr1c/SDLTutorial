@@ -19,7 +19,7 @@ int main() {
                     width, height, SDL_WINDOW_SHOWN);
   sdl->CreateRenderer(SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   constexpr int fontSize = 28;
-  sdl->CreateTTFFont("/home/eric/code/SDLTutorial/asset/lazy.ttf", fontSize);
+  sdl->CreateTTFFont("/home/eric/code/SDLTutorial/asset/NotoColorEmoji.ttf", fontSize);
   sdl->RegisterEvent(SDL_QUIT, [](const std::shared_ptr<HF::MySDL> &mysdl,
                                   const SDL_Event &event) {
     auto exitTexture = HF::TextureMessenger(
@@ -45,7 +45,7 @@ int main() {
   sdl->addPeerLoopTask(std::move(combineKeyboardCallback));
 
   /* calculate fps frame */
-  /*
+
   int countedFrames = 0;
   HF::FakerTimer fpsTimer;
   fpsTimer.start();
@@ -59,7 +59,7 @@ int main() {
         }
         auto renderPtr = mysdl.lock();
         if (renderPtr != nullptr) [[likely]] {
-          std::string nowStr = fmt::format("{}", avgFps);
+          std::string nowStr = fmt::format("💃", avgFps);
           auto timeTexture = HF::TTFFontTexture(
               renderPtr->getRendererSharedPtr(),
               renderPtr->getTTFFontSharedPtr(), nowStr, {0, 0, 0, 255});
@@ -70,7 +70,6 @@ int main() {
         ++countedFrames;
       };
   sdl->addPeerLoopTask(std::move(calculateFps));
-  */
 
   auto wifiButton =
       HF::Button(sdl->getRendererSharedPtr(),
@@ -163,8 +162,10 @@ int main() {
     SDL_RenderClear(mysdl->getRendererPtr());
     timeTexture.render(0, 0);
     SDL_RenderPresent(mysdl->getRendererPtr());
-  });
-  */
+  })
+  ;*/
+
+  /*
   auto dot = std::make_shared<Dot>(sdl->getRendererSharedPtr(),
                                    "/home/eric/code/SDLTutorial/asset/dot.bmp");
   sdl->RegisterEvent(SDL_KEYDOWN,
@@ -198,6 +199,7 @@ int main() {
           SDL_RenderPresent(mysdl->getRendererPtr());
         }
       });
+  */
 
   sdl->LoopAndWaitEvent();
   return 0;

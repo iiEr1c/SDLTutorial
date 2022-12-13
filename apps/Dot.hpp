@@ -9,7 +9,7 @@
 struct Dot {
   static inline int DOT_WIDTH = 20;
   static inline int DOT_HEIGHT = 20;
-  static inline int DOT_VEL = 10;
+  static inline int DOT_VEL = 1;
 
   Dot();
   Dot(const std::shared_ptr<HF::MySDLRender> &, const std::string &);

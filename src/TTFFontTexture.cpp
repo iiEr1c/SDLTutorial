@@ -14,8 +14,9 @@ TTFFontTexture::TTFFontTexture(const std::shared_ptr<MySDLRender> &render,
                                                                     textColor} {
   if (render != nullptr && render->available() && ttf != nullptr &&
       ttf->available()) {
-    auto surface = MySDLSurface(
-        TTF_RenderText_Solid(ttf->getTTFPtr(), text.c_str(), textColor));
+    // auto surface = MySDLSurface(
+    //     TTF_RenderText_Solid(ttf->getTTFPtr(), text.c_str(), textColor));
+    auto surface = MySDLSurface(TTF_RenderUTF8_Blended(ttf->getTTFPtr(), text.c_str(), textColor));
     if (!surface.available()) [[unlikely]] {
       fmt::print("Unable to render text surface! SDL_ttf Error:{}\n",
                  TTF_GetError());
