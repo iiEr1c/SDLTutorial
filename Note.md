@@ -177,6 +177,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 **todo: 尝试解决这个问题.**
 
+可以使用SDL_UserEvent这个自定义接口定义所谓的void*
+
 现在暂时将接口修改为```std::unordered_map<uint32_t, std::vector<MySDLEvent>>```, 然后为为每一个对象都创一个闭包.
 
 这里还得提供接口: 如何将具体对象从事件链表中剔除出去, 也许这里可以使用observer? 因为vector的有序性, 其实可以返回vector中的下标给用户, 如果需要解注册那么用这个下标即可. 这么一想是不是应该使用vector了, 毕竟动态性不是那么友好. 而是使用std::list, 将迭代器返回给用户, 因为迭代器也不会失效. 考虑到每次事件触发都要遍历, 先使用std::vector吧, 毕竟cache友好.
